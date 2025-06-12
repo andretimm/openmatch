@@ -16,7 +16,7 @@ var (
 func fetchIssuesForLanguage(lang, sinceTimestamp string, wg *sync.WaitGroup, issueChan chan<- []Issue, errChan chan<- error) {
 	defer wg.Done()
 
-	query := fmt.Sprintf(`label:"good first issue","help wanted" is:issue is:open language:%s created:>%s`, lang, sinceTimestamp)
+	query := fmt.Sprintf(`label:"good first issue","help wanted" is:issue is:open no:assignee -linked:pr language:%s created:>%s`, lang, sinceTimestamp)
 	searchURL := fmt.Sprintf("https://api.github.com/search/issues?q=%s&sort=created&order=asc&per_page=100", url.QueryEscape(query))
 
 	req, err := http.NewRequest("GET", searchURL, nil)
