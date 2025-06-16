@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 	"sync"
 	"time"
 )
@@ -13,14 +14,13 @@ func main() {
 
 	// --- 1. Configuração e Conexão com o Banco ---
 	// Ex: "postgres://user:password@host:port/dbname"
-	connString := "postgres://postgres:D69RPDWl0zrRudtYpJjm86oULbmw4iX5h6ASGJhvxHuG0dg8ElPwdIWfyG3gj3m8@test-vps.timm.software:5432/postgres"
-	// if connString == "" {
-	// 	log.Fatal("Variável de ambiente DATABASE_URL não definida.")
-	// }
-	// if os.Getenv("GITHUB_TOKEN") != "" {
-	// 	githubToken = os.Getenv("GITHUB_TOKEN")
-	// }
-	githubToken = "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"
+	connString := os.Getenv("DATABASE_URL")
+	if connString == "" {
+		log.Fatal("Variável de ambiente DATABASE_URL não definida.")
+	}
+	if os.Getenv("GITHUB_TOKEN") != "" {
+		githubToken = os.Getenv("GITHUB_TOKEN")
+	}
 
 	pool, err := initDB(connString)
 	if err != nil {

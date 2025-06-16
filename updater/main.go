@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
 	"github.com/shurcooL/graphql"
@@ -12,8 +13,13 @@ func main() {
 	log.Println("🛠️ Iniciando script de atualização de issues...")
 	startTime := time.Now()
 
-	connString := "postgres://postgres:D69RPDWl0zrRudtYpJjm86oULbmw4iX5h6ASGJhvxHuG0dg8ElPwdIWfyG3gj3m8@test-vps.timm.software:5432/postgres"
-	githubToken = "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"
+	connString := os.Getenv("DATABASE_URL")
+	if connString == "" {
+		log.Fatal("Variável de ambiente DATABASE_URL não definida.")
+	}
+	if os.Getenv("GITHUB_TOKEN") != "" {
+		githubToken = os.Getenv("GITHUB_TOKEN")
+	}
 	pool, err := initDB(connString)
 	if err != nil {
 		log.Fatalf("Não foi possível conectar ao PostgreSQL: %v\n", err)

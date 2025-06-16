@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	githubToken = "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" // Substitua ou use variáveis de ambiente
+	githubToken = "" // Substitua ou use variáveis de ambiente
 	client      = &http.Client{}
 )
 
