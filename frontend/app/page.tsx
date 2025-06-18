@@ -6,6 +6,7 @@ import { ArrowLeft, GitBranch, Heart, Sparkles, Target } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { languages } from "./_constants/languages";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
@@ -17,6 +18,14 @@ export default function Home() {
         : [...prev, languageKey]
     );
   };
+
+  const handleShowIssues = () => {
+    if (selectedLanguages.length > 0) {
+      const tags = selectedLanguages.map((lang) => `tag=${lang}`).join("&");
+      redirect(`/issues?${tags}`);
+    }
+  };
+
   return (
     <div className="relative container mx-auto px-6 py-12">
       <div className="max-w-6xl mx-auto">
@@ -30,15 +39,15 @@ export default function Home() {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent leading-tight">
-            GitHub Issue
+            Open Source
             <br />
             <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              Swiper
+              Match
             </span>
           </h1>
 
           <p className="text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Descubra issues incríveis do GitHub de forma divertida. Selecione
+            Descubra projeto incríveis do GitHub de forma divertida. Selecione
             suas tecnologias favoritas e encontre projetos perfeitos para
             contribuir.
           </p>
@@ -50,20 +59,21 @@ export default function Home() {
             {
               icon: Target,
               title: "Selecione",
-              description: "Escolha uma ou mais tecnologias que você domina",
+              description: "Escolha uma ou mais tecnologias que você praticar",
               gradient: "from-blue-500 to-cyan-500",
             },
             {
               icon: GitBranch,
               title: "Explore",
               description:
-                "Navegue por issues reais com recompensas em dinheiro",
+                "Navegue por issues reais de projetos open source e encontre oportunidades para contribuir",
               gradient: "from-purple-500 to-pink-500",
             },
             {
               icon: Heart,
               title: "Contribua",
-              description: "Salve issues interessantes e comece a contribuir",
+              description:
+                "Salve issues que achar interessante e comece a contribuir",
               gradient: "from-green-500 to-emerald-500",
             },
           ].map((item, index) => (
@@ -160,8 +170,10 @@ export default function Home() {
           )} */}
 
           <Button
+            onClick={handleShowIssues}
+            disabled={selectedLanguages.length === 0}
             size="lg"
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-12 py-4 text-lg font-semibold rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-12 py-4 text-lg font-semibold rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
           >
             Começar Exploração
             <ArrowLeft className="w-6 h-6 ml-3 rotate-180" />
