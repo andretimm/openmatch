@@ -5,7 +5,7 @@ import { issues } from "@prisma/client";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { redirect, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Language, languages } from "../_constants/languages";
 import { getIssuesByTags } from "../_data/issues/get-issues-by-tags";
@@ -79,32 +79,33 @@ const ReposPage = () => {
   };
 
   return (
-    <div className="relative">
-      {/* Header otimizado */}
-      <div className="w-full px-6 py-4 border-b border-slate-700/50">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              className="text-gray-400 hover:text-white hover:bg-slate-700"
-              onClick={handleBackToHome}
-            >
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              Voltar
-            </Button>
+    <Suspense>
+      <div className="relative">
+        {/* Header otimizado */}
+        <div className="w-full px-6 py-4 border-b border-slate-700/50">
+          <div className="max-w-6xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                className="text-gray-400 hover:text-white hover:bg-slate-700"
+                onClick={handleBackToHome}
+              >
+                <ArrowLeft className="h-5 w-5 mr-2" />
+                Voltar
+              </Button>
 
-            <div className="text-center">
-              <h2 className="text-xl font-semibold  flex gap-2">
-                {langs.map((l) => (
-                  <span key={l.key}>
-                    <Image src={l.icon} alt={l.name} width={24} height={24} />
-                  </span>
-                ))}
-              </h2>
+              <div className="text-center">
+                <h2 className="text-xl font-semibold  flex gap-2">
+                  {langs.map((l) => (
+                    <span key={l.key}>
+                      <Image src={l.icon} alt={l.name} width={24} height={24} />
+                    </span>
+                  ))}
+                </h2>
+              </div>
             </div>
-          </div>
 
-          {/* <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-gray-400">
               <BookmarkCheck className="h-5 w-5" />
               <span className="text-sm">savedIssues.length salvas</span>
@@ -126,37 +127,37 @@ const ReposPage = () => {
               <Settings className="h-4 w-4" />
             </Button>
           </div> */}
+          </div>
         </div>
-      </div>
 
-      {/* Layout principal otimizado para telas grandes */}
-      <div className="px-6 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 flex justify-center">
-              {issuesList.length === 0 && !isLoading ? (
-                <div className="text-center text-white">
-                  <p>Nenhuma issue encontrada.</p>
-                </div>
-              ) : currentIssue ? (
-                <div className="w-full max-w-2xl">
-                  <IssueCard
-                    issue={currentIssue}
-                    onSave={handleSave}
-                    onSkip={handleSkip}
-                  />
-                </div>
-              ) : (
-                <div className="text-center text-white">
-                  <p>Carregando próxima issue...</p>
-                </div>
-              )}
-            </div>
+        {/* Layout principal otimizado para telas grandes */}
+        <div className="px-6 py-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 flex justify-center">
+                {issuesList.length === 0 && !isLoading ? (
+                  <div className="text-center text-white">
+                    <p>Nenhuma issue encontrada.</p>
+                  </div>
+                ) : currentIssue ? (
+                  <div className="w-full max-w-2xl">
+                    <IssueCard
+                      issue={currentIssue}
+                      onSave={handleSave}
+                      onSkip={handleSkip}
+                    />
+                  </div>
+                ) : (
+                  <div className="text-center text-white">
+                    <p>Carregando próxima issue...</p>
+                  </div>
+                )}
+              </div>
 
-            {/* Sidebar com informações extras */}
-            <div className="space-y-6">
-              {/* Issues salvas recentes */}
-              {/* {savedIssues.length > 0 && (
+              {/* Sidebar com informações extras */}
+              <div className="space-y-6">
+                {/* Issues salvas recentes */}
+                {/* {savedIssues.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700/50">
                   <h3 className="text-lg font-semibold text-white mb-4">
                     Salvas Recentemente
@@ -184,22 +185,23 @@ const ReposPage = () => {
                 </div>
               )} */}
 
-              {/* Dicas */}
-              <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700/50">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  💡 Dicas
-                </h3>
-                <div className="space-y-2 text-sm text-gray-300">
-                  <p>• Use &quot;Salvar&quot; para issues interessantes</p>
-                  <p>• &quot;Pular&quot; para próxima issue</p>
-                  <p>• Clique no link externo para ver no GitHub</p>
+                {/* Dicas */}
+                <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700/50">
+                  <h3 className="text-lg font-semibold text-white mb-4">
+                    💡 Dicas
+                  </h3>
+                  <div className="space-y-2 text-sm text-gray-300">
+                    <p>• Use &quot;Salvar&quot; para issues interessantes</p>
+                    <p>• &quot;Pular&quot; para próxima issue</p>
+                    <p>• Clique no link externo para ver no GitHub</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 
