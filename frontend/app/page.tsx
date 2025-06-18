@@ -1,103 +1,173 @@
+"use client";
+
+import { Button } from "@/app/_components/ui/button";
+import { Card, CardContent } from "@/app/_components/ui/card";
+import { ArrowLeft, GitBranch, Heart, Sparkles, Target } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import { languages } from "./_constants/languages";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleLanguageToggle = (languageKey: string) => {
+    setSelectedLanguages((prev) =>
+      prev.includes(languageKey)
+        ? prev.filter((lang) => lang !== languageKey)
+        : [...prev, languageKey]
+    );
+  };
+  return (
+    <div className="relative container mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+            <Sparkles className="w-5 h-5 text-yellow-400" />
+            <span className="text-sm font-medium text-gray-300">
+              Descubra projetos incríveis
+            </span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent leading-tight">
+            GitHub Issue
+            <br />
+            <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Swiper
+            </span>
+          </h1>
+
+          <p className="text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Descubra issues incríveis do GitHub de forma divertida. Selecione
+            suas tecnologias favoritas e encontre projetos perfeitos para
+            contribuir.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Tutorial Cards */}
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          {[
+            {
+              icon: Target,
+              title: "Selecione",
+              description: "Escolha uma ou mais tecnologias que você domina",
+              gradient: "from-blue-500 to-cyan-500",
+            },
+            {
+              icon: GitBranch,
+              title: "Explore",
+              description:
+                "Navegue por issues reais com recompensas em dinheiro",
+              gradient: "from-purple-500 to-pink-500",
+            },
+            {
+              icon: Heart,
+              title: "Contribua",
+              description: "Salve issues interessantes e comece a contribuir",
+              gradient: "from-green-500 to-emerald-500",
+            },
+          ].map((item, index) => (
+            <Card
+              key={index}
+              className="bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-all duration-300 group"
+            >
+              <CardContent className="p-8 text-center">
+                <div
+                  className={`w-16 h-16 bg-gradient-to-r ${item.gradient} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}
+                >
+                  <item.icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-white">
+                  {item.title}
+                </h3>
+                <p className="text-gray-400 leading-relaxed">
+                  {item.description}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Language Selection */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4 text-white">
+            Escolha suas tecnologias
+          </h2>
+          <p className="text-gray-400 mb-10">
+            Selecione uma ou mais linguagens que você gostaria de explorar
+          </p>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+            {languages.map((lang) => {
+              const isSelected = selectedLanguages.includes(lang.key);
+              return (
+                <div
+                  key={lang.key}
+                  onClick={() => handleLanguageToggle(lang.key)}
+                  className={`
+                        relative p-6 rounded-2xl cursor-pointer transition-all duration-150 group
+                        ${
+                          isSelected
+                            ? "bg-gradient-to-r " +
+                              lang.color +
+                              " shadow-2xl scale-105"
+                            : "bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:scale-105"
+                        }
+                      `}
+                >
+                  <div className="text-center">
+                    <div className="text-3xl mb-3">
+                      <Image
+                        src={lang.icon}
+                        alt={lang.name}
+                        width={32}
+                        height={32}
+                        className="inline-block"
+                      />
+                    </div>
+                    <h3
+                      className={`font-semibold ${
+                        isSelected ? "text-white" : "text-gray-300"
+                      }`}
+                    >
+                      {lang.name}
+                    </h3>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* {selectedLanguages.length > 0 && (
+            <div className="mb-8">
+              <p className="text-sm text-gray-400 mb-4">
+                Tecnologias selecionadas:
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {selectedLanguages.map((langKey) => {
+                  const lang = languages.find((l) => l.key === langKey);
+                  return (
+                    <Badge
+                      key={langKey}
+                      className={`bg-gradient-to-r ${lang?.color} text-white px-3 py-1`}
+                    >
+                      {lang?.icon} {lang?.name}
+                    </Badge>
+                  );
+                })}
+              </div>
+            </div>
+          )} */}
+
+          <Button
+            size="lg"
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-12 py-4 text-lg font-semibold rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
+          >
+            Começar Exploração
+            <ArrowLeft className="w-6 h-6 ml-3 rotate-180" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

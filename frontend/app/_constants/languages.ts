@@ -1,0 +1,87 @@
+export interface Language {
+  name: string;
+  key: string;
+  color: string;
+  icon: string;
+}
+
+export const languages: Language[] = [
+  {
+    name: "Python",
+    key: "python",
+    color: "from-blue-400 to-yellow-500",
+    icon: "icons/python.svg",
+  },
+  {
+    name: "JavaScript",
+    key: "javascript",
+    color: "from-yellow-400 to-yellow-500",
+    icon: "icons/javascript.svg",
+  },
+  {
+    name: "TypeScript",
+    key: "typescript",
+    color: "from-blue-500 to-blue-700",
+    icon: "icons/typescript.svg",
+  },
+  {
+    name: "Java",
+    key: "java",
+    color: "from-orange-500 to-red-600",
+    icon: "icons/java.svg",
+  },
+  {
+    name: "C#",
+    key: "csharp",
+    color: "from-purple-500 to-purple-700",
+    icon: "icons/csharp.svg",
+  },
+  {
+    name: "Go",
+    key: "go",
+    color: "from-cyan-400 to-cyan-600",
+    icon: "icons/go.svg",
+  },
+  {
+    name: "Rust",
+    key: "rust",
+    color: "from-orange-600 to-orange-800",
+    icon: "icons/rust.svg",
+  },
+  {
+    name: "Kotlin",
+    key: "kotlin",
+    color: "from-violet-500 to-purple-600",
+    icon: "icons/kotlin.svg",
+  },
+  {
+    name: "Swift",
+    key: "swift",
+    color: "from-orange-400 to-red-500",
+    icon: "icons/swift.svg",
+  },
+  {
+    name: "React / React Native",
+    key: "react",
+    color: "from-cyan-400 to-blue-500",
+    icon: "icons/react.svg",
+  },
+  {
+    name: "Angular",
+    key: "angular",
+    color: "from-red-600 to-red-800",
+    icon: "icons/angular.svg",
+  },
+  {
+    name: "Vue.js",
+    key: "vuejs",
+    color: "from-green-400 to-teal-500",
+    icon: "icons/vuejs.svg",
+  },
+  {
+    name: "Node.js",
+    key: "nodejs",
+    color: "from-green-500 to-green-700",
+    icon: "icons/nodejs.svg",
+  },
+];
