@@ -1,16 +1,15 @@
 "use client";
 
 import { Button } from "@/app/_components/ui/button";
-import { ArrowLeft, BookmarkCheck, Settings, User } from "lucide-react";
-import Image from "next/image";
-import IssueCard from "./components/IssueCard";
-import { use, useEffect, useState } from "react";
 import { issues } from "@prisma/client";
-import { getIssuesByTags } from "../_data/issues/get-issues-by-tags";
-import { Language, languages } from "../_constants/languages";
-import React from "react";
-import { toast } from "sonner";
+import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
 import { redirect, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Language, languages } from "../_constants/languages";
+import { getIssuesByTags } from "../_data/issues/get-issues-by-tags";
+import IssueCard from "./components/IssueCard";
 
 const ReposPage = () => {
   // const [loading, setLoading] = useState(true);
