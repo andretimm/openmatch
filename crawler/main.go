@@ -39,7 +39,7 @@ func main() {
 
 	// --- 3. Execução Concorrente da Busca na API ---
 	// languages := []string{"go", "python", "javascript", "typescript", "rust", "java", "ruby", "csharp", "php", "swift"}
-	languages := []string{"javascript", "typescript"}
+	languages := []string{"javascript", "typescript", "java"}
 	var wg sync.WaitGroup
 	issueChan := make(chan []Issue, len(languages))
 	errChan := make(chan error, len(languages))
