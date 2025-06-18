@@ -101,7 +101,7 @@ const IssueCard = ({ issue, onSave, onSkip }: IssueCardProps) => {
         <div className="flex gap-3">
           <button
             onClick={onSkip}
-            className="flex-1 flex items-center justify-center bg-transparent hover:bg-red-500/30 border border-red-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
+            className="flex-1 cursor-pointer flex items-center justify-center bg-transparent hover:bg-red-500/30 border border-red-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
             aria-label="Pular"
           >
             {/* Ícone X */}
@@ -122,7 +122,7 @@ const IssueCard = ({ issue, onSave, onSkip }: IssueCardProps) => {
           </button>
           <button
             onClick={onSave}
-            className="flex-1 flex items-center justify-center bg-transparent hover:bg-green-500/30 border border-green-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
+            className="flex-1 cursor-pointer flex items-center justify-center bg-transparent hover:bg-green-500/30 border border-green-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
             aria-label="Salvar"
           >
             {/* Ícone Coração */}
