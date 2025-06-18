@@ -73,6 +73,7 @@ const IssueCard = ({ issue, onSave, onSkip }: IssueCardProps) => {
       <div className="px-6 pt-2">
         <div className="flex flex-wrap gap-2 mb-4">
           {Array.isArray(issue.labels)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             ? issue.labels.slice(0, 3).map((label: any) => (
                 <Badge
                   key={label.name}
