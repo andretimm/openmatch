@@ -73,8 +73,8 @@ const IssueCard = ({ issue, onSave, onSkip }: IssueCardProps) => {
       <div className="px-6 pt-2">
         <div className="flex flex-wrap gap-2 mb-4">
           {Array.isArray(issue.labels)
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            ? issue.labels.slice(0, 3).map((label: any) => (
+            ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              issue.labels.slice(0, 3).map((label: any) => (
                 <Badge
                   key={label.name}
                   variant="secondary"
@@ -101,15 +101,45 @@ const IssueCard = ({ issue, onSave, onSkip }: IssueCardProps) => {
         <div className="flex gap-3">
           <button
             onClick={onSkip}
-            className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 rounded-lg py-3 px-4 font-medium transition-all duration-200 hover:scale-105"
+            className="flex-1 flex items-center justify-center bg-transparent hover:bg-red-500/30 border border-red-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
+            aria-label="Pular"
           >
-            Pular
+            {/* Ícone X */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-7 w-7 stroke-red-400 group-hover:fill-red-400 transition-all"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
           <button
             onClick={onSave}
-            className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 rounded-lg py-3 px-4 font-medium transition-all duration-200 hover:scale-105"
+            className="flex-1 flex items-center justify-center bg-transparent hover:bg-green-500/30 border border-green-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
+            aria-label="Salvar"
           >
-            Salvar
+            {/* Ícone Coração */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-7 w-7 stroke-green-400 group-hover:fill-green-400 transition-all"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 21C12 21 4 13.5 4 8.75C4 6.12665 6.12665 4 8.75 4C10.2056 4 11.5912 4.80964 12.3431 6.01562C13.0949 4.80964 14.4805 4 15.9361 4C18.5595 4 20.6861 6.12665 20.6861 8.75C20.6861 13.5 12 21 12 21Z"
+              />
+            </svg>
           </button>
         </div>
       </div>
