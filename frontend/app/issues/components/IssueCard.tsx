@@ -2,7 +2,7 @@ import { Badge } from "@/app/_components/ui/badge";
 import { Card, CardHeader } from "@/app/_components/ui/card";
 import { issues } from "@prisma/client";
 import { motion, useAnimation } from "framer-motion";
-import { Clock, ExternalLink, GitBranch, Star, User } from "lucide-react";
+import { Clock, ExternalLink, GitBranch, User } from "lucide-react";
 import { useEffect, useRef } from "react";
 interface IssueCardProps {
   issue: issues;
@@ -98,14 +98,13 @@ const IssueCard = ({
   return (
     <motion.div
       ref={cardRef}
-      className="w-full max-w-md mx-auto card-shadow gradient-border h-[420px] flex flex-col bg-gray-900 border-gray-800"
       drag="x"
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={handleDragEnd}
       animate={controls}
       style={{ touchAction: "pan-y", willChange: "transform, opacity" }}
     >
-      <Card className="w-full max-w-md mx-auto card-shadow gradient-border animate-scale-in h-[420px] flex flex-col bg-gray-900 border-gray-800">
+      <Card className="w-full max-w-xl mx-auto card-shadow gradient-border animate-scale-in h-[480px] flex flex-col bg-gray-900 border-gray-800">
         <CardHeader className="">
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -133,16 +132,13 @@ const IssueCard = ({
               <GitBranch className="h-4 w-4" />
               <span>{issue.project_name}</span>
             </div>
-            <div className="flex items-center gap-1">
-              <Star className="h-4 w-4 text-yellow-400" />
-            </div>
           </div>
         </CardHeader>
 
         {/* Descrição ocupa o espaço disponível */}
         <div className="flex-1 px-6 pb-2 overflow-auto">
           <p className="text-gray-300 text-sm leading-relaxed">
-            {truncateText(issue.body || "Sem descrição disponível", 200)}
+            {truncateText(issue.body || "Sem descrição disponível", 400)}
           </p>
         </div>
 
