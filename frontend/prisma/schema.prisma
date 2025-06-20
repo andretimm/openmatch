@@ -7,14 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model crawler_state {
+model CrawlerState {
   id                 Int      @id
   last_run_timestamp DateTime @db.Timestamptz(6)
+
+  @@map("crawler_state")
 }
 
-model issues {
-  id             BigInt    @id
-  node_id        String    @unique
+model Issue {
+  id             BigInt       @id
+  node_id        String       @unique
   url            String?
   repository_url String?
   title          String?
@@ -23,7 +25,21 @@ model issues {
   project_name   String?
   language       String?
   labels         Json?
-  created_at     DateTime? @db.Timestamptz(6)
-  updated_at     DateTime? @db.Timestamptz(6)
+  created_at     DateTime?    @db.Timestamptz(6)
+  updated_at     DateTime?    @db.Timestamptz(6)
   body           String?
+  SavedIssue     SavedIssue[]
+
+  @@map("issues")
+}
+
+model SavedIssue {
+  id        String   @id @default(uuid())
+  userId    String
+  issueId   BigInt
+  createdAt DateTime @default(now())
+
+  issue Issue @relation(fields: [issueId], references: [id])
+
+  @@map("saved_issue")
 }

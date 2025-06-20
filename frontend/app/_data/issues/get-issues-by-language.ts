@@ -1,21 +1,33 @@
 "use server";
 
 import { db } from "@/app/_lib/prisma";
-import { Prisma, issues } from "@prisma/client";
+import { auth } from "@clerk/nextjs/server";
+import { Prisma, Issue } from "@prisma/client";
 
-export const getIssuesByTags = async (
+export const getIssuesByLanguage = async (
   languagesToFilter: string[],
   page: number = 1
 ) => {
-  const pageSize = 50; 
+  const { userId } = await auth();
+
+  const pageSize = 50;
   const offset = (page - 1) * pageSize;
   const languageCondition =
     languagesToFilter.length > 0
       ? Prisma.sql`i.language IN (${Prisma.join(languagesToFilter)})`
       : Prisma.sql`TRUE`;
 
+  const notSavedCondition = userId
+    ? Prisma.sql`
+        AND NOT EXISTS (
+          SELECT 1 FROM "saved_issue" si
+          WHERE si."issueId" = i.id AND si."userId" = ${userId}
+        )
+      `
+    : Prisma.empty;
+
   try {
-    const issues = await db.$queryRaw<issues[]>(Prisma.sql`
+    const issues = await db.$queryRaw<Issue[]>(Prisma.sql`
       SELECT
         i.id,
         i.node_id,
@@ -35,8 +47,9 @@ export const getIssuesByTags = async (
       WHERE
         ${languageCondition}
         AND i.state = 'open'
+        ${notSavedCondition}
       ORDER BY
-        i.id ASC
+         i.created_at DESC
       LIMIT ${pageSize}
       OFFSET ${offset};
     `);

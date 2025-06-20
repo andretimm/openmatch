@@ -1,11 +1,11 @@
 import { Badge } from "@/app/_components/ui/badge";
 import { Card, CardHeader } from "@/app/_components/ui/card";
-import { issues } from "@prisma/client";
+import { Issue } from "@prisma/client";
 import { motion, useAnimation } from "framer-motion";
 import { Clock, ExternalLink, GitBranch, User } from "lucide-react";
 import { useEffect, useRef } from "react";
 interface IssueCardProps {
-  issue: issues;
+  issue: Issue;
   onSave: () => void;
   onSkip: () => void;
   swipeDirection?: "left" | "right" | null;

@@ -2,27 +2,27 @@
 
 import { Button } from "@/app/_components/ui/button";
 import { useUser } from "@clerk/nextjs";
-import { issues } from "@prisma/client";
+import { Issue } from "@prisma/client";
 import { motion } from "framer-motion";
-import { ArrowLeft, BookmarkCheck } from "lucide-react";
+import { ArrowLeft, BookmarkCheck, RefreshCcw } from "lucide-react";
 import Image from "next/image";
 import { redirect, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { saveIssue } from "../_actions/issues/save-issue";
 import ClerkAuthArea from "../_components/login-area";
 import { Language, languages } from "../_constants/languages";
-import { getIssuesByTags } from "../_data/issues/get-issues-by-tags";
+import { getIssuesByLanguage } from "../_data/issues/get-issues-by-language";
+import { getCountSavedIssues } from "../_data/issues/get-saved-issues-by-user";
 import IssueCard from "./components/IssueCard";
 
 function Repos() {
   const { isSignedIn } = useUser();
-
-  // const [loading, setLoading] = useState(true);
-  const [currentIssue, setCurrentIssue] = useState<issues>();
-  // const [issues, setIssues] = useState<issues[]>([]);
+  const [reloadDisabled, setReloadDisabled] = useState(false);
+  const [currentIssue, setCurrentIssue] = useState<Issue>();
   const [langs, setLangs] = useState<Language[]>([]);
 
-  const [issuesList, setIssuesList] = useState<issues[]>([]);
+  const [issuesList, setIssuesList] = useState<Issue[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -31,13 +31,31 @@ function Repos() {
   const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(
     null
   );
+  const [countSavedIssues, setCountSavedIssues] = useState<number>(0);
+  const [reloadCount, setReloadCount] = useState(0);
+  const fetchIdRef = useRef(0);
   const searchParams = useSearchParams();
   const tagsInArray = searchParams.getAll("tag");
 
+  const handleReload = () => {
+    if (reloadDisabled) return;
+    setReloadDisabled(true);
+    setCurrentIndex(0);
+    setIssuesList([]);
+    setHasMore(true);
+    setCurrentPage(1);
+    setReloadCount((prev) => prev + 1);
+    setTimeout(() => setReloadDisabled(false), 5000); // 3 segundos de cooldown
+  };
+
   useEffect(() => {
+    let isActive = true;
+    const fetchId = ++fetchIdRef.current;
+
     const fetchIssues = async (tags: string[], page: number) => {
       setIsLoading(true);
-      const newIssues = await getIssuesByTags(tags, page);
+      const newIssues = await getIssuesByLanguage(tags, page);
+      if (!isActive || fetchId !== fetchIdRef.current) return;
       if (newIssues.length === 0) {
         setHasMore(false);
       } else {
@@ -52,9 +70,20 @@ function Repos() {
         .filter(Boolean) as Language[]
     );
 
-    console.log(tagsInArray);
     fetchIssues(tagsInArray, currentPage);
-  }, [tagsInArray.join(","), currentPage]);
+
+    return () => {
+      isActive = false;
+    };
+  }, [tagsInArray.join(","), currentPage, reloadCount]);
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      const count = await getCountSavedIssues();
+      setCountSavedIssues(count);
+    };
+    fetchCount();
+  }, []);
 
   useEffect(() => {
     setCurrentIssue(issuesList[currentIndex]);
@@ -70,6 +99,8 @@ function Repos() {
       ) {
         setCurrentPage((prev) => prev + 1);
       }
+    } else {
+      setCurrentIndex(currentIndex + 1);
     }
   };
 
@@ -83,11 +114,14 @@ function Repos() {
 
   const handleSave = () => {
     if (!isSignedIn) return;
+    if (!currentIssue) return;
     setSwipeDirection("right");
-    setTimeout(() => {
+    setTimeout(async () => {
       setSwipeDirection(null);
-      toast("Issue salva!");
       handleNext();
+      await saveIssue(currentIssue?.id);
+      toast(`Issues ${currentIssue?.title} salva!`);
+      setCountSavedIssues((prev) => prev + 1);
     }, 400);
   };
 
@@ -95,8 +129,26 @@ function Repos() {
     redirect("/");
   };
 
+  const handleGoToSavedIssues = () => {
+    redirect("/issues/saved");
+  };
+
+  const noIssuesMessage = (
+    <div className="text-center text-white flex flex-col items-center justify-center h-[420px]">
+      <p className="mb-2">Não há mais issues no momento.</p>
+      <span className="text-4xl mb-4">🎉</span>
+      <Button
+        onClick={handleReload}
+        className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full font-semibold transition border border-white/20"
+      >
+        <RefreshCcw className="h-5 w-5" />
+        Refazer busca
+      </Button>
+    </div>
+  );
+
   return (
-    <div className="relative">
+    <div className="relative ">
       {/* Header otimizado */}
       <div className="w-full px-6 py-4 border-b border-slate-700/50">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -122,9 +174,9 @@ function Repos() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-gray-400">
+            <div className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-blue-400" onClick={handleGoToSavedIssues}>
               <BookmarkCheck className="h-5 w-5" />
-              <span className="text-sm">0 salvas</span>
+              <span className="text-sm">{countSavedIssues} salvas</span>
             </div>
 
             <ClerkAuthArea />
@@ -138,10 +190,8 @@ function Repos() {
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 flex justify-center">
               {issuesList.length === 0 && !isLoading ? (
-                <div className="text-center text-white">
-                  <p>Nenhuma issue encontrada.</p>
-                </div>
-              ) : currentIssue ? (
+                noIssuesMessage
+              ) : currentIndex < issuesList.length ? (
                 <div className="relative w-full max-w-2xl h-[420px] mx-auto">
                   {issuesList[currentIndex + 1] && (
                     <motion.div
@@ -167,9 +217,7 @@ function Repos() {
                   </div>
                 </div>
               ) : (
-                <div className="text-center text-white">
-                  <p>Carregando próxima issue...</p>
-                </div>
+                noIssuesMessage
               )}
             </div>
 
