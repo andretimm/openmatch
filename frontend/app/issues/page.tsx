@@ -3,10 +3,11 @@
 import { Button } from "@/app/_components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import { issues } from "@prisma/client";
+import { motion } from "framer-motion";
 import { ArrowLeft, BookmarkCheck } from "lucide-react";
 import Image from "next/image";
 import { redirect, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
 import ClerkAuthArea from "../_components/login-area";
 import { Language, languages } from "../_constants/languages";
@@ -30,8 +31,6 @@ function Repos() {
   const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(
     null
   );
-  const cardRef = useRef<HTMLDivElement>(null);
-
   const searchParams = useSearchParams();
   const tagsInArray = searchParams.getAll("tag");
 
@@ -143,14 +142,29 @@ function Repos() {
                   <p>Nenhuma issue encontrada.</p>
                 </div>
               ) : currentIssue ? (
-                <div className="w-full max-w-2xl">
-                  <IssueCard
-                    ref={cardRef}
-                    issue={currentIssue}
-                    onSave={handleSave}
-                    onSkip={handleSkip}
-                    swipeDirection={swipeDirection}
-                  />
+                <div className="relative w-full max-w-2xl h-[420px] mx-auto">
+                  {issuesList[currentIndex + 1] && (
+                    <motion.div
+                      className="absolute inset-0 z-0 pointer-events-none"
+                      initial={{ scale: 0.96, opacity: 0.7 }}
+                      animate={{ scale: 0.96, opacity: 0.7 }}
+                    >
+                      <IssueCard
+                        issue={issuesList[currentIndex + 1]}
+                        onSave={() => {}}
+                        onSkip={() => {}}
+                      />
+                    </motion.div>
+                  )}
+
+                  <div className="absolute inset-0 z-10">
+                    <IssueCard
+                      issue={issuesList[currentIndex]}
+                      onSave={handleSave}
+                      onSkip={handleSkip}
+                      swipeDirection={swipeDirection}
+                    />
+                  </div>
                 </div>
               ) : (
                 <div className="text-center text-white">
