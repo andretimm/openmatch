@@ -1,17 +1,21 @@
 "use client";
 
 import { Button } from "@/app/_components/ui/button";
+import { useUser } from "@clerk/nextjs";
 import { issues } from "@prisma/client";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookmarkCheck } from "lucide-react";
 import Image from "next/image";
 import { redirect, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import ClerkAuthArea from "../_components/login-area";
 import { Language, languages } from "../_constants/languages";
 import { getIssuesByTags } from "../_data/issues/get-issues-by-tags";
 import IssueCard from "./components/IssueCard";
 
 function Repos() {
+  const { isSignedIn } = useUser();
+
   // const [loading, setLoading] = useState(true);
   const [currentIssue, setCurrentIssue] = useState<issues>();
   // const [issues, setIssues] = useState<issues[]>([]);
@@ -22,6 +26,11 @@ function Repos() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(
+    null
+  );
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const searchParams = useSearchParams();
   const tagsInArray = searchParams.getAll("tag");
@@ -66,12 +75,21 @@ function Repos() {
   };
 
   const handleSkip = () => {
-    handleNext();
+    setSwipeDirection("left");
+    setTimeout(() => {
+      setSwipeDirection(null);
+      handleNext();
+    }, 400);
   };
 
   const handleSave = () => {
-    toast("Issue salva!");
-    handleNext();
+    if (!isSignedIn) return;
+    setSwipeDirection("right");
+    setTimeout(() => {
+      setSwipeDirection(null);
+      toast("Issue salva!");
+      handleNext();
+    }, 400);
   };
 
   const handleBackToHome = () => {
@@ -104,28 +122,14 @@ function Repos() {
             </div>
           </div>
 
-          {/* <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-gray-400">
               <BookmarkCheck className="h-5 w-5" />
-              <span className="text-sm">savedIssues.length salvas</span>
+              <span className="text-sm">0 salvas</span>
             </div>
 
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-gray-400 hover:text-white"
-            >
-              <User className="h-4 w-4 mr-2" />
-              Login
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-gray-400 hover:text-white"
-            >
-              <Settings className="h-4 w-4" />
-            </Button>
-          </div> */}
+            <ClerkAuthArea />
+          </div>
         </div>
       </div>
 
@@ -141,9 +145,11 @@ function Repos() {
               ) : currentIssue ? (
                 <div className="w-full max-w-2xl">
                   <IssueCard
+                    ref={cardRef}
                     issue={currentIssue}
                     onSave={handleSave}
                     onSkip={handleSkip}
+                    swipeDirection={swipeDirection}
                   />
                 </div>
               ) : (
@@ -190,9 +196,27 @@ function Repos() {
                   💡 Dicas
                 </h3>
                 <div className="space-y-2 text-sm text-gray-300">
-                  <p>• Use &quot;Salvar&quot; para issues interessantes</p>
-                  <p>• &quot;Pular&quot; para próxima issue</p>
-                  <p>• Clique no link externo para ver no GitHub</p>
+                  {isSignedIn ? (
+                    <>
+                      <p>• Use &quot;Salvar&quot; para issues interessantes</p>
+                      <p>• &quot;Pular&quot; para próxima issue</p>
+                      <p>• Clique no link externo para ver no GitHub</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>
+                        Para salvar issues e acompanhar suas favoritas, faça
+                        login com seu GitHub.
+                      </p>
+                      <div className="mt-4">
+                        <ClerkAuthArea />
+                      </div>
+                      <p className="mt-4">
+                        Você só pode salvar issues após fazer login. Use a seta
+                        para pular para a próxima issue.
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

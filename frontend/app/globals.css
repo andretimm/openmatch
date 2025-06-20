@@ -120,3 +120,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+.swipe-left {
+  animation: swipeLeft 0.4s forwards;
+}
+.swipe-right {
+  animation: swipeRight 0.4s forwards;
+}
+
+@keyframes swipeLeft {
+  to {
+    transform: translate(-200px, 100px) rotate(-20deg);
+    opacity: 0;
+  }
+}
+@keyframes swipeRight {
+  to {
+    transform: translate(200px, 100px) rotate(20deg);
+    opacity: 0;
+  }
+}

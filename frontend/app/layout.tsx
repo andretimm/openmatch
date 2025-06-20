@@ -1,6 +1,9 @@
+import { ptBR } from "@clerk/localizations";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import type { Metadata } from "next";
-import "./globals.css";
 import { Toaster } from "./_components/ui/sonner";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,16 +16,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body>
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
-          {children}
-        </div>
-        <Toaster />
-      </body>
-    </html>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+      localization={ptBR}
+    >
+      <html lang="pt-BR">
+        <body>
+          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+            {children}
+          </div>
+          <Toaster />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
