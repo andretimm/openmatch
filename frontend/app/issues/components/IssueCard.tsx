@@ -1,8 +1,10 @@
 import { Badge } from "@/app/_components/ui/badge";
 import { Card, CardHeader } from "@/app/_components/ui/card";
+import { languages } from "@/app/_constants/languages";
 import { Issue } from "@prisma/client";
 import { motion, useAnimation } from "framer-motion";
 import { Clock, ExternalLink, GitBranch, User } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 interface IssueCardProps {
   issue: Issue;
@@ -41,6 +43,9 @@ const IssueCard = ({
 
   const controls = useAnimation();
   const cardRef = useRef<HTMLDivElement>(null);
+  const lang = languages.find(
+    (l) => l.key.toLowerCase() === issue.language?.toLowerCase()
+  );
 
   const handleDragEnd = (
     _: MouseEvent | TouchEvent | PointerEvent,
@@ -179,11 +184,25 @@ const IssueCard = ({
               <h3 className="text-lg font-semibold text-white mb-2 leading-tight">
                 {truncateText(issue.title || "Sem título disponível", 50)}
               </h3>
+
               <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
                 <User className="h-4 w-4" />
                 <span>{issue.user_login}</span>
                 <Clock className="h-4 w-4 ml-2" />
                 <span>{formatDate(issue.created_at)}</span>
+                {lang && (
+                  <>
+                    <Image
+                      src={`/${lang.icon}`}
+                      alt={lang.name}
+                      className="w-4 h-4 ml-2"
+                      width={16}
+                      height={16}
+                    />
+
+                    <span> {lang.name}</span>
+                  </>
+                )}
               </div>
             </div>
             <a
