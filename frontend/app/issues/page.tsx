@@ -131,7 +131,7 @@ function Repos() {
   };
 
   const handleGoToSavedIssues = () => {
-    redirect("/issues/saved");
+    window.location.href = "/issues/saved";
   };
 
   const noIssuesMessage = (
@@ -250,6 +250,36 @@ function Repos() {
               </div>
             </div>
 
+            <div className="space-y-6">
+              <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700/50">
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  💡 Dicas
+                </h3>
+                <div className="space-y-2 text-sm text-gray-300">
+                  {isSignedIn ? (
+                    <>
+                      <p>• Use &quot;Salvar&quot; para issues interessantes</p>
+                      <p>• &quot;Pular&quot; para próxima issue</p>
+                      <p>• Clique no link externo para ver no GitHub</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>
+                        Para salvar issues e acompanhar suas favoritas, faça
+                        login com seu GitHub.
+                      </p>
+                      <div className="mt-4">
+                        <ClerkAuthArea />
+                      </div>
+                      <p className="mt-4">
+                        Você só pode salvar issues após fazer login. Use a seta
+                        para pular para a próxima issue.
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
