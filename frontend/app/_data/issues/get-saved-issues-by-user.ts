@@ -11,7 +11,7 @@ export interface SavedIssue extends Issue {
 
 export async function getSavedIssues(): Promise<SavedIssue[]> {
   const { userId } = await auth();
-  if (!userId) throw new Error("Usuário não autenticado");
+  if (!userId) return [];
 
   const issuesSaved = await db.savedIssue.findMany({
     where: { userId },

@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function saveIssue(issueId: bigint) {
   const { userId } = await auth();
-  if (!userId) throw new Error("Usuário não autenticado");
+  if (!userId) return null;
 
   // Evita salvar duplicado
   const alreadySaved = await db.savedIssue.findFirst({

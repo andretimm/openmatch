@@ -15,6 +15,7 @@ import { Language, languages } from "../_constants/languages";
 import { getIssuesByLanguage } from "../_data/issues/get-issues-by-language";
 import { getCountSavedIssues } from "../_data/issues/get-saved-issues-by-user";
 import IssueCard from "./components/IssueCard";
+import Link from "next/link";
 
 function Repos() {
   const { isSignedIn } = useUser();
@@ -174,7 +175,10 @@ function Repos() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-blue-400" onClick={handleGoToSavedIssues}>
+            <div
+              className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-blue-400"
+              onClick={handleGoToSavedIssues}
+            >
               <BookmarkCheck className="h-5 w-5" />
               <span className="text-sm">{countSavedIssues} salvas</span>
             </div>
@@ -188,7 +192,7 @@ function Repos() {
       <div className="px-6 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 flex justify-center">
+            <div className="lg:col-span-2 flex flex-col justify-center">
               {issuesList.length === 0 && !isLoading ? (
                 noIssuesMessage
               ) : currentIndex < issuesList.length ? (
@@ -219,6 +223,32 @@ function Repos() {
               ) : (
                 noIssuesMessage
               )}
+
+              <div className="max-w-6xl mx-auto px-6 py-8 ">
+                <div className="flex justify-center mt-14">
+                  <Link
+                    href="/contribute"
+                    target="_blank"
+                    className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-blue-400 font-semibold text-base transition"
+                  >
+                    <span>Clique aqui para descobrir como contribuir</span>
+                    <svg
+                      className="w-6 h-6 animate-bounce rotate-90"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                      // seta para a direita
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
             </div>
 
             {/* Sidebar com informações extras */}
