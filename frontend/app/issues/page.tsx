@@ -17,6 +17,7 @@ import { getCountSavedIssues } from "../_data/issues/get-saved-issues-by-user";
 import IssueCard from "./components/IssueCard";
 import Link from "next/link";
 import { Skeleton } from "../_components/ui/skeleton";
+import { useIsMobile } from "../_hooks/use-mobile";
 
 function Repos() {
   const { isSignedIn } = useUser();
@@ -38,6 +39,8 @@ function Repos() {
   const [reloadCount, setReloadCount] = useState(0);
   const fetchIdRef = useRef(0);
   const searchParams = useSearchParams();
+   const isMobile = useIsMobile();
+  
   const tagsInArray = searchParams.getAll("tag");
 
   const handleReload = () => {
@@ -167,8 +170,8 @@ function Repos() {
             </Button>
 
             <div className="text-center">
-              <h2 className="text-xl font-semibold  flex gap-2">
-                {langs.map((l) => (
+              <h2 className="text-xl font-semibold flex gap-2">
+                {!isMobile && langs.map((l) => (
                   <span key={l.key}>
                     <Image src={l.icon} alt={l.name} width={24} height={24} />
                   </span>
@@ -243,7 +246,7 @@ function Repos() {
                     target="_blank"
                     className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-blue-400 font-semibold text-base transition"
                   >
-                    <span>Clique aqui para descobrir como contribuir</span>
+                    <span className="text-sm md:text-base">Clique aqui para descobrir como contribuir</span>
                     <svg
                       className="w-6 h-6 animate-bounce rotate-90"
                       fill="none"

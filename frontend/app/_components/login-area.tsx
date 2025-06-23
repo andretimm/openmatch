@@ -1,13 +1,16 @@
+
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { Button } from "./ui/button";
+import { useIsMobile } from "../_hooks/use-mobile";
 
 export default function ClerkAuthArea() {
   const { user, isSignedIn } = useUser();
+  const isMobile = useIsMobile();
 
   if (isSignedIn && user) {
     return (
-      <div className="flex items-center gap-3 bg-white/10 px-3 py-1 rounded-full">
-        <UserButton showName={true} />
+      <div className="flex items-center gap-3 bg-white/10 px-1 md:px-3 py-1 rounded-full">
+        <UserButton showName={!isMobile} />
       </div>
     );
   }

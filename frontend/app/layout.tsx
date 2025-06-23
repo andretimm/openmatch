@@ -64,8 +64,6 @@ export const metadata: Metadata = {
     type: "website",
   },
 
-  // Twitter Card (para compartilhamento no Twitter)
-  // --------------------------------------------------
   twitter: {
     card: "summary_large_image",
     title: "OpenMatch: Encontre sua Primeira Contribuição Open Source",
@@ -223,8 +221,8 @@ export default function RootLayout({
         <body>
           <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/4 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
             {children}
             <Analytics />
           </div>
