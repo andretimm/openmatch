@@ -4,7 +4,8 @@ import "time"
 
 // Label (sem alterações)
 type Label struct {
-	Name string `json:"name"`
+	Name  string `json:"name"`
+	Color string `json:"color"` // <<<< CAMPO NOVO
 }
 
 // IssueToUpdate (sem alterações)

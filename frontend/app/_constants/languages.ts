@@ -50,7 +50,7 @@ export const languages: Language[] = [
   },
   {
     name: "C#",
-    key: "csharp",
+    key: "c#",
     color: "from-purple-800 to-purple-900",
     icon: "icons/csharp.svg",
   },

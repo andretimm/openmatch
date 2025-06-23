@@ -23,7 +23,8 @@ type FragmentIssue struct {
 	UpdatedAt time.Time
 	Labels    struct {
 		Nodes []struct {
-			Name graphql.String
+			Name  graphql.String
+			Color graphql.String // <<<< CAMPO NOVO
 		}
 	} `graphql:"labels(first:10)"`
 	Assignees struct {
@@ -65,7 +66,7 @@ func fetchUpdatesFromGitHubGraphQL(ctx context.Context, nodeIDs []graphql.ID) ([
 
 		var labelsToSave []Label
 		for _, l := range node.Issue.Labels.Nodes {
-			labelsToSave = append(labelsToSave, Label{Name: string(l.Name)})
+			labelsToSave = append(labelsToSave, Label{Name: string(l.Name), Color: string(l.Color)}) // <<<< PROCESSANDO O NOVO CAMPO
 		}
 
 		// Populamos a struct final com a contagem de 'assignees'.
