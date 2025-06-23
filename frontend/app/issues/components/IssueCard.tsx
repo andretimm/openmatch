@@ -9,6 +9,7 @@ interface IssueCardProps {
   onSave: () => void;
   onSkip: () => void;
   swipeDirection?: "left" | "right" | null;
+  isAuthenticated: boolean;
 }
 
 const SWIPE_THRESHOLD = 120;
@@ -18,6 +19,7 @@ const IssueCard = ({
   onSave,
   onSkip,
   swipeDirection,
+  isAuthenticated = false,
 }: IssueCardProps) => {
   const formatDate = (dateString: Date | null) => {
     if (!dateString) return "Sem data disponível";
@@ -52,7 +54,11 @@ const IssueCard = ({
         opacity: 0,
         transition: { duration: 0.4 },
       });
-      onSave();
+      if (isAuthenticated) {
+        onSave();
+        return;
+      }
+      onSkip();
     } else if (info.offset.x < -SWIPE_THRESHOLD) {
       controls.start({
         x: -400,
@@ -95,6 +101,68 @@ const IssueCard = ({
     }
   }, [swipeDirection, controls]);
 
+  const changeIssueButtons = () => {
+    if (!isAuthenticated) {
+      return (
+        <button
+          onClick={onSkip}
+          className="flex-1 cursor-pointer text-white flex items-center justify-center bg-gray-500/20 hover:bg-gray-500/30 border border-gray-500/30 rounded-lg py-3 px-4 "
+          aria-label="Proxima"
+        >
+          {/* Ícone X */}
+          Proxima
+        </button>
+      );
+    } else {
+      return (
+        <>
+          <button
+            onClick={onSkip}
+            className="flex-1 cursor-pointer flex items-center justify-center bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
+            aria-label="Pular"
+          >
+            {/* Ícone X */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-7 w-7 stroke-red-400 group-hover:fill-red-400 transition-all"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={onSave}
+            className="flex-1 cursor-pointer flex items-center justify-center bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
+            aria-label="Salvar"
+          >
+            {/* Ícone Coração */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-7 w-7 stroke-green-400 group-hover:fill-green-400 transition-all"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 21C12 21 4 13.5 4 8.75C4 6.12665 6.12665 4 8.75 4C10.2056 4 11.5912 4.80964 12.3431 6.01562C13.0949 4.80964 14.4805 4 15.9361 4C18.5595 4 20.6861 6.12665 20.6861 8.75C20.6861 13.5 12 21 12 21Z"
+              />
+            </svg>
+          </button>
+        </>
+      );
+    }
+  };
+
   return (
     <motion.div
       ref={cardRef}
@@ -135,14 +203,12 @@ const IssueCard = ({
           </div>
         </CardHeader>
 
-        {/* Descrição ocupa o espaço disponível */}
         <div className="flex-1 px-6 pb-2 overflow-auto">
           <p className="text-gray-300 text-sm leading-relaxed">
             {truncateText(issue.body || "Sem descrição disponível", 400)}
           </p>
         </div>
 
-        {/* Footer fixo com tags e botões */}
         <div className="px-6 pt-2">
           <div className="flex flex-wrap gap-2 mb-4">
             {Array.isArray(issue.labels)
@@ -171,50 +237,7 @@ const IssueCard = ({
             )}
           </div>
 
-          <div className="flex gap-3">
-            <button
-              onClick={onSkip}
-              className="flex-1 cursor-pointer flex items-center justify-center bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
-              aria-label="Pular"
-            >
-              {/* Ícone X */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7 stroke-red-400 group-hover:fill-red-400 transition-all"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-            <button
-              onClick={onSave}
-              className="flex-1 cursor-pointer flex items-center justify-center bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
-              aria-label="Salvar"
-            >
-              {/* Ícone Coração */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7 stroke-green-400 group-hover:fill-green-400 transition-all"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 21C12 21 4 13.5 4 8.75C4 6.12665 6.12665 4 8.75 4C10.2056 4 11.5912 4.80964 12.3431 6.01562C13.0949 4.80964 14.4805 4 15.9361 4C18.5595 4 20.6861 6.12665 20.6861 8.75C20.6861 13.5 12 21 12 21Z"
-                />
-              </svg>
-            </button>
-          </div>
+          <div className="flex gap-3">{changeIssueButtons()}</div>
         </div>
       </Card>
     </motion.div>

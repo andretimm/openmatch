@@ -22,12 +22,12 @@ import {
   ArrowLeft,
   Bookmark,
   BookmarkCheck,
-  Eye,
+  ExternalLink,
   Filter,
   GitBranch,
   Search,
   Trash2,
-  User,
+  User
 } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -71,7 +71,6 @@ const SavedIssues = () => {
   const handleRemoveFromSaved = async (issueId: bigint) => {
     setRemoving(true);
     try {
-      // Chame sua função server para remover a issue salva
       await removeSavedIssue(issueId);
       setSavedIssues((prev) => prev.filter((i) => i.id !== issueId));
       setCountSavedIssues((prev) => prev - 1);
@@ -130,7 +129,6 @@ const SavedIssues = () => {
       </div>
 
       <div className="container mx-auto px-6 py-8 max-w-6xl">
-        {/* Filtros e Busca */}
         <div className="mb-8 flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -158,7 +156,6 @@ const SavedIssues = () => {
           </div>
         </div>
 
-        {/* Lista de Issues */}
         {filteredSavedIssues.length === 0 ? (
           <div className="text-center py-16">
             <Bookmark className="w-16 h-16 text-gray-600 mx-auto mb-4" />
@@ -202,11 +199,11 @@ const SavedIssues = () => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        aria-label="Visualizar detalhes"
+                        aria-label="Visualizar Issue"
                         className="text-gray-400 hover:text-blue-400"
-                        // onClick={() => handleViewIssueDetail(issue)}
+                        onClick={() => window.open(issue.url || "#", "_blank")}
                       >
-                        <Eye className="w-4 h-4" />
+                        <ExternalLink className="w-4 h-4" />
                       </Button>
                       <Button
                         variant="ghost"

@@ -150,7 +150,6 @@ function Repos() {
 
   return (
     <div className="relative ">
-      {/* Header otimizado */}
       <div className="w-full px-6 py-4 border-b border-slate-700/50">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -188,7 +187,6 @@ function Repos() {
         </div>
       </div>
 
-      {/* Layout principal otimizado para telas grandes */}
       <div className="px-6 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-8">
@@ -207,6 +205,7 @@ function Repos() {
                         issue={issuesList[currentIndex + 1]}
                         onSave={() => {}}
                         onSkip={() => {}}
+                        isAuthenticated={isSignedIn ?? false}
                       />
                     </motion.div>
                   )}
@@ -217,6 +216,7 @@ function Repos() {
                       onSave={handleSave}
                       onSkip={handleSkip}
                       swipeDirection={swipeDirection}
+                      isAuthenticated={isSignedIn ?? false}
                     />
                   </div>
                 </div>
@@ -238,7 +238,6 @@ function Repos() {
                       stroke="currentColor"
                       strokeWidth={2}
                       viewBox="0 0 24 24"
-                      // seta para a direita
                     >
                       <path
                         strokeLinecap="round"
@@ -251,67 +250,6 @@ function Repos() {
               </div>
             </div>
 
-            {/* Sidebar com informações extras */}
-            <div className="space-y-6">
-              {/* Issues salvas recentes */}
-              {/* {savedIssues.length > 0 && (
-                <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700/50">
-                  <h3 className="text-lg font-semibold text-white mb-4">
-                    Salvas Recentemente
-                  </h3>
-                  <div className="space-y-2">
-                    {savedIssues
-                      .slice(-3)
-                      .reverse()
-                      .map((issue) => (
-                        <div key={issue.id} className="text-sm">
-                          <p className="text-gray-300 truncate">
-                            {issue.title}
-                          </p>
-                          <p className="text-gray-500 text-xs">
-                            {issue.repository.name}
-                          </p>
-                        </div>
-                      ))}
-                  </div>
-                  {savedIssues.length > 3 && (
-                    <p className="text-xs text-gray-500 mt-2">
-                      +{savedIssues.length - 3} outras issues
-                    </p>
-                  )}
-                </div>
-              )} */}
-
-              {/* Dicas */}
-              <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700/50">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  💡 Dicas
-                </h3>
-                <div className="space-y-2 text-sm text-gray-300">
-                  {isSignedIn ? (
-                    <>
-                      <p>• Use &quot;Salvar&quot; para issues interessantes</p>
-                      <p>• &quot;Pular&quot; para próxima issue</p>
-                      <p>• Clique no link externo para ver no GitHub</p>
-                    </>
-                  ) : (
-                    <>
-                      <p>
-                        Para salvar issues e acompanhar suas favoritas, faça
-                        login com seu GitHub.
-                      </p>
-                      <div className="mt-4">
-                        <ClerkAuthArea />
-                      </div>
-                      <p className="mt-4">
-                        Você só pode salvar issues após fazer login. Use a seta
-                        para pular para a próxima issue.
-                      </p>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
