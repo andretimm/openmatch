@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/app/_components/ui/dialog";
 import { Input } from "@/app/_components/ui/input";
+import { Skeleton } from "@/app/_components/ui/skeleton";
 import { languages } from "@/app/_constants/languages";
 import {
   getCountSavedIssues,
@@ -27,7 +28,7 @@ import {
   GitBranch,
   Search,
   Trash2,
-  User
+  User,
 } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -42,13 +43,17 @@ const SavedIssues = () => {
 
   const [issueToRemove, setIssueToRemove] = useState<SavedIssue | null>(null);
   const [removing, setRemoving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchCountAndIssues = async () => {
+      setIsLoading(true);
       const count = await getCountSavedIssues();
       const issues = await getSavedIssues();
       setSavedIssues(issues);
       setCountSavedIssues(count);
+
+      setIsLoading(false);
     };
     fetchCountAndIssues();
   }, []);
@@ -118,10 +123,14 @@ const SavedIssues = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-gray-400">
-              <BookmarkCheck className="h-5 w-5" />
-              <span className="text-sm">{countSavedIssues} salvas</span>
-            </div>
+            {isLoading ? (
+              <Skeleton className="w-24 h-9 bg-slate-700/50 rounded-lg" />
+            ) : (
+              <div className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-blue-400">
+                <BookmarkCheck className="h-5 w-5" />
+                <span className="text-sm">{countSavedIssues} salvas</span>
+              </div>
+            )}
 
             <ClerkAuthArea />
           </div>
@@ -156,7 +165,11 @@ const SavedIssues = () => {
           </div>
         </div>
 
-        {filteredSavedIssues.length === 0 ? (
+        {isLoading ? (
+          <div className="relative w-full h-[360px] mx-auto flex flex-col gap-4">
+            <Skeleton className="w-full h-full rounded-xl bg-slate-700/50" />
+          </div>
+        ) : filteredSavedIssues.length === 0 ? (
           <div className="text-center py-16">
             <Bookmark className="w-16 h-16 text-gray-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">

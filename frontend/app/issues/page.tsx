@@ -16,6 +16,7 @@ import { getIssuesByLanguage } from "../_data/issues/get-issues-by-language";
 import { getCountSavedIssues } from "../_data/issues/get-saved-issues-by-user";
 import IssueCard from "./components/IssueCard";
 import Link from "next/link";
+import { Skeleton } from "../_components/ui/skeleton";
 
 function Repos() {
   const { isSignedIn } = useUser();
@@ -25,7 +26,8 @@ function Repos() {
 
   const [issuesList, setIssuesList] = useState<Issue[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingCount, setIsLoadingCount] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -80,8 +82,10 @@ function Repos() {
 
   useEffect(() => {
     const fetchCount = async () => {
+      setIsLoadingCount(true);
       const count = await getCountSavedIssues();
       setCountSavedIssues(count);
+      setIsLoadingCount(false);
     };
     fetchCount();
   }, []);
@@ -174,13 +178,17 @@ function Repos() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div
-              className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-blue-400"
-              onClick={handleGoToSavedIssues}
-            >
-              <BookmarkCheck className="h-5 w-5" />
-              <span className="text-sm">{countSavedIssues} salvas</span>
-            </div>
+            {isLoadingCount ? (
+              <Skeleton className="w-24 h-9 bg-slate-700/50 rounded-lg" />
+            ) : (
+              <div
+                className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-blue-400"
+                onClick={handleGoToSavedIssues}
+              >
+                <BookmarkCheck className="h-5 w-5" />
+                <span className="text-sm">{countSavedIssues} salvas</span>
+              </div>
+            )}
 
             <ClerkAuthArea />
           </div>
@@ -191,7 +199,11 @@ function Repos() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 flex flex-col justify-center">
-              {issuesList.length === 0 && !isLoading ? (
+              {isLoading ? (
+                <div className="relative w-full max-w-2xl h-[420px] mx-auto flex flex-col gap-4">
+                  <Skeleton className="w-full h-full rounded-xl bg-slate-700/50" />
+                </div>
+              ) : issuesList.length === 0 ? (
                 noIssuesMessage
               ) : currentIndex < issuesList.length ? (
                 <div className="relative w-full max-w-2xl h-[420px] mx-auto">
