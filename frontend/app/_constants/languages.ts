@@ -25,10 +25,28 @@ export const languages: Language[] = [
     icon: "icons/typescript.svg",
   },
   {
+    name: "HTML",
+    key: "html",
+    color: "from-red-400 to-red-600",
+    icon: "icons/html.svg",
+  },
+  {
     name: "Java",
     key: "java",
     color: "from-orange-500 to-red-600",
     icon: "icons/java.svg",
+  },
+  {
+    name: "PHP",
+    key: "php",
+    color: "from-pink-400 to-pink-600",
+    icon: "icons/php.svg",
+  },
+  {
+    name: "Ruby",
+    key: "ruby",
+    color: "from-rose-400 to-rose-600",
+    icon: "icons/ruby.svg",
   },
   {
     name: "C#",
@@ -49,6 +67,12 @@ export const languages: Language[] = [
     icon: "icons/rust.svg",
   },
   {
+    name: "Dart",
+    key: "dart",
+    color: "from-green-400 to-green-600",
+    icon: "icons/dart.svg",
+  },
+  {
     name: "Kotlin",
     key: "kotlin",
     color: "from-violet-500 to-purple-600",
@@ -59,29 +83,5 @@ export const languages: Language[] = [
     key: "swift",
     color: "from-orange-400 to-red-500",
     icon: "icons/swift.svg",
-  },
-  {
-    name: "React / React Native",
-    key: "react",
-    color: "from-cyan-400 to-blue-500",
-    icon: "icons/react.svg",
-  },
-  {
-    name: "Angular",
-    key: "angular",
-    color: "from-red-600 to-red-800",
-    icon: "icons/angular.svg",
-  },
-  {
-    name: "Vue.js",
-    key: "vuejs",
-    color: "from-green-400 to-teal-500",
-    icon: "icons/vuejs.svg",
-  },
-  {
-    name: "Node.js",
-    key: "nodejs",
-    color: "from-green-500 to-green-700",
-    icon: "icons/nodejs.svg",
   },
 ];
