@@ -3,13 +3,13 @@
 [![Licença: MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Contribuições são bem-vindas](https://img.shields.io/badge/contribui%C3%A7%C3%B5es-bem--vindas-brightgreen.svg?style=flat)](./CONTRIBUTING.md)
 
-Uma breve descrição de uma linha sobre o objetivo do projeto. Ex: **Uma plataforma open-source que ajuda novos desenvolvedores a encontrarem suas primeiras contribuições, agregando issues para iniciantes de todo o GitHub.**
+**Uma plataforma open-source que ajuda novos desenvolvedores a encontrarem suas primeiras contribuições, agregando issues para iniciantes de todo o GitHub.**
 
 ![Screenshot da tela inicial do projeto](./frontend/public/openmatch.png)
 
 ## Sobre o Projeto
 
-Encontrar a primeira issue para contribuir em um projeto open-source pode ser uma tarefa difícil e intimidante. O [Nome do Projeto] nasceu para resolver esse problema, criando um ambiente centralizado e amigável que busca e exibe ativamente issues marcadas como "boas para iniciantes" (como `good first issue`, `help wanted`, etc.), oferecendo um ponto de partida claro para novos contribuidores.
+Encontrar a primeira issue para contribuir em um projeto open-source pode ser uma tarefa difícil e intimidante. O OpenMatch nasceu para resolver esse problema, criando um ambiente centralizado e amigável que busca e exibe ativamente issues marcadas como "boas para iniciantes" (como `good first issue`, `help wanted`, etc.), oferecendo um ponto de partida claro para novos contribuidores.
 
 ## Funcionalidades Principais
 
