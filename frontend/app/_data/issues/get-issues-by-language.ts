@@ -57,6 +57,6 @@ export const getIssuesByLanguage = async (
     return issues;
   } catch (error) {
     console.error("Erro ao filtrar issues por linguagem:", error);
-    throw error;
+    return [];
   }
 };

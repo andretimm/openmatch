@@ -7,7 +7,6 @@ export async function saveIssue(issueId: bigint) {
   const { userId } = await auth();
   if (!userId) return null;
 
-  // Evita salvar duplicado
   const alreadySaved = await db.savedIssue.findFirst({
     where: { userId, issueId },
   });

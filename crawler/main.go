@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	log.Println("🚀 Iniciando crawler performático em Go...")
+	log.Println("Iniciando crawler performático em Go...")
 	startTime := time.Now()
 
 	connString := os.Getenv("DATABASE_URL")
@@ -55,7 +55,7 @@ func main() {
 	}
 
 	for err := range errChan {
-		log.Printf("⚠️ Erro durante a busca: %v\n", err)
+		log.Printf("Erro durante a busca: %v\n", err)
 	}
 
 	log.Printf("Total de %d issues encontradas em todas as linguagens.\n", len(allIssues))
@@ -65,12 +65,12 @@ func main() {
 		if err != nil {
 			log.Fatalf("Erro na inserção em massa: %v\n", err)
 		}
-		log.Printf("✅ %d novas issues salvas no banco de dados.\n", copyCount)
+		log.Printf("%d novas issues salvas no banco de dados.\n", copyCount)
 	}
 
 	if err := updateLatestTimestamp(ctx, pool, currentRunTimestamp); err != nil {
 		log.Fatalf("Erro ao atualizar o timestamp: %v\n", err)
 	}
 
-	log.Printf("🏁 Crawler finalizado com sucesso em %v.\n", time.Since(startTime))
+	log.Printf("Crawler finalizado com sucesso em %v.\n", time.Since(startTime))
 }

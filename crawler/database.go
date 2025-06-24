@@ -33,7 +33,6 @@ func bulkInsertIssues(ctx context.Context, pool *pgxpool.Pool, issues []Issue) (
 		return 0, nil
 	}
 
-	// O comando COPY é a forma mais rápida de inserir múltiplos registros no PostgreSQL
 	copyCount, err := pool.CopyFrom(
 		ctx,
 		pgx.Identifier{"issues"},
@@ -44,7 +43,7 @@ func bulkInsertIssues(ctx context.Context, pool *pgxpool.Pool, issues []Issue) (
 
 			labelsJSON, err := json.Marshal(issue.Labels)
 			if err != nil {
-				return nil, err // Lidar com o erro de serialização
+				return nil, err
 			}
 
 			return []interface{}{

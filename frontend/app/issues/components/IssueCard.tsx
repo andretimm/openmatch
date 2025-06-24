@@ -114,7 +114,6 @@ const IssueCard = ({
           className="flex-1 cursor-pointer text-white flex items-center justify-center bg-gray-500/20 hover:bg-gray-500/30 border border-gray-500/30 rounded-lg py-3 px-4 "
           aria-label="Proxima"
         >
-          {/* Ícone X */}
           Proxima
         </button>
       );
@@ -126,7 +125,6 @@ const IssueCard = ({
             className="flex-1 cursor-pointer flex items-center justify-center bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
             aria-label="Pular"
           >
-            {/* Ícone X */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-7 w-7 stroke-red-400 group-hover:fill-red-400 transition-all"
@@ -147,7 +145,6 @@ const IssueCard = ({
             className="flex-1 cursor-pointer flex items-center justify-center bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 rounded-lg py-3 px-4 transition-all duration-200 hover:scale-105 group"
             aria-label="Salvar"
           >
-            {/* Ícone Coração */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-7 w-7 stroke-green-400 group-hover:fill-green-400 transition-all"

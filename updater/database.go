@@ -13,12 +13,10 @@ import (
 
 const BATCH_SIZE = 200
 
-// initDB (sem alterações)
 func initDB(connString string) (*pgxpool.Pool, error) {
 	return pgxpool.New(context.Background(), connString)
 }
 
-// fetchBatchOfOpenIssues (sem alterações)
 func fetchBatchOfOpenIssues(ctx context.Context, pool *pgxpool.Pool, offset int) ([]IssueToUpdate, error) {
 	query := `
 		SELECT id, node_id FROM issues 
@@ -43,7 +41,6 @@ func fetchBatchOfOpenIssues(ctx context.Context, pool *pgxpool.Pool, offset int)
 	return issues, nil
 }
 
-// bulkUpdateDatabase com a correção final de todos os type casts
 func bulkUpdateDatabase(ctx context.Context, pool *pgxpool.Pool, updates []UpdatedInfo) (int64, error) {
 	if len(updates) == 0 {
 		return 0, nil

@@ -33,7 +33,6 @@ export default function Home() {
         <ClerkAuthArea />
       </div>
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
             <Sparkles className="w-5 h-5 text-yellow-400" />
@@ -57,7 +56,6 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Tutorial Cards */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           {[
             {
@@ -102,7 +100,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Language Selection */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4 text-white">
             Escolha suas tecnologias
@@ -151,27 +148,6 @@ export default function Home() {
               );
             })}
           </div>
-
-          {/* {selectedLanguages.length > 0 && (
-            <div className="mb-8">
-              <p className="text-sm text-gray-400 mb-4">
-                Tecnologias selecionadas:
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {selectedLanguages.map((langKey) => {
-                  const lang = languages.find((l) => l.key === langKey);
-                  return (
-                    <Badge
-                      key={langKey}
-                      className={`bg-gradient-to-r ${lang?.color} text-white px-3 py-1`}
-                    >
-                      {lang?.icon} {lang?.name}
-                    </Badge>
-                  );
-                })}
-              </div>
-            </div>
-          )} */}
 
           <Button
             onClick={handleShowIssues}

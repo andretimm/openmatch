@@ -14,8 +14,6 @@ var (
 	githubToken string
 )
 
-// Adicionamos o campo 'assignees' à nossa query GraphQL.
-// Só precisamos do 'totalCount' para saber se é maior que zero.
 type FragmentIssue struct {
 	ID        graphql.ID `graphql:"id"`
 	Title     graphql.String
@@ -24,15 +22,14 @@ type FragmentIssue struct {
 	Labels    struct {
 		Nodes []struct {
 			Name  graphql.String
-			Color graphql.String // <<<< CAMPO NOVO
+			Color graphql.String
 		}
 	} `graphql:"labels(first:10)"`
 	Assignees struct {
 		TotalCount graphql.Int
-	} `graphql:"assignees(first:1)"` // <<<< NOVO CAMPO NA QUERY
+	} `graphql:"assignees(first:1)"`
 }
 
-// NodesQuery (sem alterações)
 type NodesQuery struct {
 	Nodes []struct {
 		Issue FragmentIssue `graphql:"... on Issue"`
@@ -66,24 +63,22 @@ func fetchUpdatesFromGitHubGraphQL(ctx context.Context, nodeIDs []graphql.ID) ([
 
 		var labelsToSave []Label
 		for _, l := range node.Issue.Labels.Nodes {
-			labelsToSave = append(labelsToSave, Label{Name: string(l.Name), Color: string(l.Color)}) // <<<< PROCESSANDO O NOVO CAMPO
+			labelsToSave = append(labelsToSave, Label{Name: string(l.Name), Color: string(l.Color)})
 		}
 
-		// Populamos a struct final com a contagem de 'assignees'.
 		updatedInfos = append(updatedInfos, UpdatedInfo{
 			ID:            fmt.Sprintf("%v", node.Issue.ID),
 			Title:         string(node.Issue.Title),
 			State:         strings.ToLower(string(node.Issue.State)),
 			Labels:        labelsToSave,
 			UpdatedAt:     node.Issue.UpdatedAt,
-			AssigneeCount: int(node.Issue.Assignees.TotalCount), // <<<< PROCESSANDO O NOVO CAMPO
+			AssigneeCount: int(node.Issue.Assignees.TotalCount),
 		})
 	}
 
 	return updatedInfos, nil
 }
 
-// authTransport (sem alterações)
 type authTransport struct {
 	Token string
 }

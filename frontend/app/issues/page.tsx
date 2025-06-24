@@ -51,7 +51,7 @@ function Repos() {
     setHasMore(true);
     setCurrentPage(1);
     setReloadCount((prev) => prev + 1);
-    setTimeout(() => setReloadDisabled(false), 5000); // 3 segundos de cooldown
+    setTimeout(() => setReloadDisabled(false), 5000);
   };
 
   useEffect(() => {

@@ -4,7 +4,6 @@ import Link from "next/link";
 export default function ContribuaPage() {
   return (
     <div className="relative ">
-      {/* Header otimizado */}
       <div className="w-full border-b border-slate-700/50">
         <div className="max-w-6xl mx-auto ">
           <Link href="/">

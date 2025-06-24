@@ -8,7 +8,7 @@ type SearchResult struct {
 
 type Label struct {
 	Name  string `json:"name"`
-	Color string `json:"color"` // <<<< CAMPO NOVO
+	Color string `json:"color"`
 }
 
 type Issue struct {
@@ -23,9 +23,8 @@ type Issue struct {
 	Labels        []Label   `json:"labels"`
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
-	// Campos que adicionaremos
-	ProjectName string `json:"-"`
-	Language    string `json:"-"`
+	ProjectName   string    `json:"-"`
+	Language      string    `json:"-"`
 }
 
 type User struct {

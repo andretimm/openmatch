@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	githubToken = "" // Substitua ou use variáveis de ambiente
+	githubToken = ""
 	client      = &http.Client{}
 )
 
@@ -45,13 +45,12 @@ func fetchIssuesForLanguage(lang, sinceTimestamp string, wg *sync.WaitGroup, iss
 		return
 	}
 
-	// Adiciona a linguagem a cada issue encontrada
 	for i := range result.Items {
 		result.Items[i].Language = lang
 	}
 
 	fmt.Printf("Encontradas %d issues para a linguagem %s.\n", len(result.Items), lang)
-	//mostar o resultado
+
 	fmt.Println(result.Items)
 	issueChan <- result.Items
 }
