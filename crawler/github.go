@@ -49,8 +49,14 @@ func fetchIssuesForLanguage(lang, sinceTimestamp string, wg *sync.WaitGroup, iss
 		result.Items[i].Language = lang
 	}
 
-	fmt.Printf("Encontradas %d issues para a linguagem %s.\n", len(result.Items), lang)
+	var issuesWithDescription []Issue
+	for _, issue := range result.Items {
+		if issue.Body != "" {
+			issuesWithDescription = append(issuesWithDescription, issue)
+		}
+	}
 
-	fmt.Println(result.Items)
-	issueChan <- result.Items
+	fmt.Printf("Encontradas %d issues para a linguagem %s.\n", len(issuesWithDescription), lang)
+
+	issueChan <- issuesWithDescription
 }
