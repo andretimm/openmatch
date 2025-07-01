@@ -14,6 +14,10 @@ func initDB(connString string) (*pgxpool.Pool, error) {
 	return pgxpool.New(context.Background(), connString)
 }
 
+func sanitizeString(s string) string {
+	return strings.ReplaceAll(s, "\x00", "")
+}
+
 func getLatestTimestamp(ctx context.Context, pool *pgxpool.Pool) (string, error) {
 	var lastRun time.Time
 	err := pool.QueryRow(ctx, "SELECT last_run_timestamp FROM crawler_state WHERE id = 1").Scan(&lastRun)
@@ -51,7 +55,7 @@ func bulkInsertIssues(ctx context.Context, pool *pgxpool.Pool, issues []Issue) (
 				issue.NodeID,
 				issue.URL,
 				issue.RepositoryURL,
-				issue.Title,
+				sanitizeString(issue.Title),
 				issue.User.Login,
 				issue.State,
 				projectName,
@@ -59,7 +63,7 @@ func bulkInsertIssues(ctx context.Context, pool *pgxpool.Pool, issues []Issue) (
 				labelsJSON,
 				issue.CreatedAt,
 				issue.UpdatedAt,
-				issue.Body,
+				sanitizeString(issue.Body),
 			}, nil
 		}),
 	)
