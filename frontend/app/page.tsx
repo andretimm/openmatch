@@ -22,7 +22,10 @@ export default function Home() {
 
   const handleShowIssues = () => {
     if (selectedLanguages.length > 0) {
-      const tags = selectedLanguages.map((lang) => `tag=${lang}`).join("&");
+      const tags = new URLSearchParams();
+      selectedLanguages.forEach((lang) => {
+        tags.append("tag", lang);
+      });
       redirect(`/issues?${tags}`);
     }
   };
