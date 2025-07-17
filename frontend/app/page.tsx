@@ -193,7 +193,7 @@ export default function Home() {
         </div>
       </div>
       <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-t border-gray-200">
-        <div className="container mx-auto px-6 py-16">
+        <div className="container mx-auto px-6 py-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800 mb-3">
               Apoiadores
