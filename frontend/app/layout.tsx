@@ -3,8 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
-import { Toaster } from "./_components/ui/sonner";
-import "./globals.css";
+import { Toaster } from "@/app/_components/ui/sonner";
+import "@/app/globals.css";
 
 const siteUrl = "https://www.openmatch.io";
 

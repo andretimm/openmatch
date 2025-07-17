@@ -1,23 +1,23 @@
 "use client";
 
+import { saveIssue } from "@/app/_actions/issues/save-issue";
+import ClerkAuthArea from "@/app/_components/login-area";
 import { Button } from "@/app/_components/ui/button";
+import { Skeleton } from "@/app/_components/ui/skeleton";
+import { Language, languages } from "@/app/_constants/languages";
+import { getIssuesByLanguage } from "@/app/_data/issues/get-issues-by-language";
+import { getCountSavedIssues } from "@/app/_data/issues/get-saved-issues-by-user";
+import { useIsMobile } from "@/app/_hooks/use-mobile";
+import IssueCard from "@/app/issues/components/IssueCard";
 import { useUser } from "@clerk/nextjs";
 import { Issue } from "@prisma/client";
 import { motion } from "framer-motion";
 import { ArrowLeft, BookmarkCheck, RefreshCcw } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { saveIssue } from "../_actions/issues/save-issue";
-import ClerkAuthArea from "../_components/login-area";
-import { Language, languages } from "../_constants/languages";
-import { getIssuesByLanguage } from "../_data/issues/get-issues-by-language";
-import { getCountSavedIssues } from "../_data/issues/get-saved-issues-by-user";
-import IssueCard from "./components/IssueCard";
-import Link from "next/link";
-import { Skeleton } from "../_components/ui/skeleton";
-import { useIsMobile } from "../_hooks/use-mobile";
 
 function Repos() {
   const { isSignedIn } = useUser();
@@ -39,8 +39,8 @@ function Repos() {
   const [reloadCount, setReloadCount] = useState(0);
   const fetchIdRef = useRef(0);
   const searchParams = useSearchParams();
-   const isMobile = useIsMobile();
-  
+  const isMobile = useIsMobile();
+
   const tagsInArray = searchParams.getAll("tag");
 
   const handleReload = () => {
@@ -171,11 +171,12 @@ function Repos() {
 
             <div className="text-center">
               <h2 className="text-xl font-semibold flex gap-2">
-                {!isMobile && langs.map((l) => (
-                  <span key={l.key}>
-                    <Image src={l.icon} alt={l.name} width={24} height={24} />
-                  </span>
-                ))}
+                {!isMobile &&
+                  langs.map((l) => (
+                    <span key={l.key}>
+                      <Image src={l.icon} alt={l.name} width={24} height={24} />
+                    </span>
+                  ))}
               </h2>
             </div>
           </div>
@@ -246,7 +247,9 @@ function Repos() {
                     target="_blank"
                     className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-blue-400 font-semibold text-base transition"
                   >
-                    <span className="text-sm md:text-base">Clique aqui para descobrir como contribuir</span>
+                    <span className="text-sm md:text-base">
+                      Clique aqui para descobrir como contribuir
+                    </span>
                     <svg
                       className="w-6 h-6 animate-bounce rotate-90"
                       fill="none"
