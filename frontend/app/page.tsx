@@ -15,6 +15,7 @@ import { useState } from "react";
 import { languages } from "./_constants/languages";
 import { redirect } from "next/navigation";
 import ClerkAuthArea from "./_components/login-area";
+import { useIsMobile } from "./_hooks/use-mobile";
 
 const partners = [
   {
@@ -33,6 +34,7 @@ const partners = [
 
 export default function Home() {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const isMobile = useIsMobile();
 
   const handleLanguageToggle = (languageKey: string) => {
     setSelectedLanguages((prev) =>
@@ -55,7 +57,9 @@ export default function Home() {
   return (
     <>
       <div className="relative container mx-auto px-6 py-12">
-        <div className="absolute top-6 right-6 z-50">
+        <div
+          className={`absolute top-6 right-6 z-50 ${isMobile ? "hidden" : ""}`}
+        >
           <ClerkAuthArea />
         </div>
         <div className="max-w-6xl mx-auto">
