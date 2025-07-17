@@ -232,7 +232,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="text-center mt-12 pt-8 border-t border-gray-200">
+          <div className="text-center mt-8 pt-8 border-t border-gray-200">
             <p className="text-sm text-gray-500">
               Quer apoiar este projeto?{" "}
               <a
