@@ -22,12 +22,14 @@ const partners = [
     id: 1,
     name: "Cumbuda Dev",
     logo: "/partnership/cumbuca.svg",
+    alt: "Logo da Cumbuda Dev",
     url: "https://cumbuca.dev/?utm_source=openmatch&utm_medium=referral&utm_campaign=openmatch",
   },
   {
     id: 2,
     name: "Timm Softwate",
-    logo: "/partnership/cumbuca.svg",
+    logo: "/partnership/timm-software-bg-icon.svg",
+    alt: "Logo da Timm Softwate",
     url: "https://timm.software/?utm_source=openmatch&utm_medium=referral&utm_campaign=openmatch",
   },
 ];
@@ -215,7 +217,7 @@ export default function Home() {
                 <div className="w-24 h-24  rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-sm transition-all duration-300">
                   <Image
                     src={sponsor.logo}
-                    alt={sponsor.name}
+                    alt={sponsor.alt}
                     width={96}
                     height={96}
                   />
