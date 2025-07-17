@@ -1,7 +1,6 @@
-
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
-import { Button } from "./ui/button";
-import { useIsMobile } from "../_hooks/use-mobile";
+import { Button } from "@/app/_components/ui/button";
+import { useIsMobile } from "@/app/_hooks/use-mobile";
 
 export default function ClerkAuthArea() {
   const { user, isSignedIn } = useUser();

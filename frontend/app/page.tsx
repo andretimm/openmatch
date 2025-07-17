@@ -12,10 +12,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { languages } from "./_constants/languages";
+import { languages } from "@/app/_constants/languages";
 import { redirect } from "next/navigation";
-import ClerkAuthArea from "./_components/login-area";
-import { useIsMobile } from "./_hooks/use-mobile";
+import ClerkAuthArea from "@/app/_components/login-area";
+import { useIsMobile } from "@/app/_hooks/use-mobile";
 
 const partners = [
   {
