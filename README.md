@@ -5,7 +5,10 @@
 
 **Uma plataforma open-source que ajuda novos desenvolvedores a encontrarem suas primeiras contribuições, agregando issues para iniciantes de todo o GitHub.**
 
-![Screenshot da tela inicial do projeto](./frontend/public/openmatch.png)
+<p align="center">
+  <img width="350" height="350" src="./frontend/public/openmatch.png" alt="OpenMatch logo">
+</p>
+
 
 ## Sobre o Projeto
 
