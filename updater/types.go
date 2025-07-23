@@ -13,10 +13,13 @@ type IssueToUpdate struct {
 }
 
 type UpdatedInfo struct {
-	ID            string
-	Title         string
-	State         string
-	Labels        []Label
-	UpdatedAt     time.Time
-	AssigneeCount int
+	ID                  string
+	Title               string
+	State               string
+	Labels              []Label
+	UpdatedAt           time.Time
+	AssigneeCount       int
+	RepoStars           int
+	RepoForks           int
+	RepoOpenIssuesCount int
 }

@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"sync"
 	"time"
@@ -59,6 +61,73 @@ func main() {
 	}
 
 	log.Printf("Total de %d issues encontradas em todas as linguagens.\n", len(allIssues))
+
+	uniqueRepoURLs := make(map[string]bool)
+	for _, issue := range allIssues {
+		uniqueRepoURLs[issue.RepositoryURL] = true
+	}
+
+	repoDetailsChan := make(chan *RepositoryDetails, len(uniqueRepoURLs))
+	repoErrChan := make(chan error, len(uniqueRepoURLs))
+	var repoWg sync.WaitGroup
+
+	repoDetailsMap := make(map[string]*RepositoryDetails)
+
+	for repoURL := range uniqueRepoURLs {
+		repoWg.Add(1)
+		go func(url string) {
+			defer repoWg.Done()
+			req, err := http.NewRequest("GET", url, nil)
+			if err != nil {
+				repoErrChan <- err
+				return
+			}
+			req.Header.Set("Authorization", "token "+githubToken)
+			req.Header.Set("Accept", "application/vnd.github.v3+json")
+
+			resp, err := client.Do(req)
+			if err != nil {
+				repoErrChan <- err
+				return
+			}
+			defer resp.Body.Close()
+
+			if resp.StatusCode != http.StatusOK {
+				// Ignora erros de repositório (ex: 404 se foi deletado)
+				return
+			}
+
+			var details RepositoryDetails
+			if err := json.NewDecoder(resp.Body).Decode(&details); err != nil {
+				repoErrChan <- err
+				return
+			}
+			details.Description = url
+			repoDetailsChan <- &details
+		}(repoURL)
+	}
+
+	repoWg.Wait()
+	close(repoDetailsChan)
+	close(repoErrChan)
+
+	for err := range repoErrChan {
+		log.Printf("⚠️ Erro durante a busca de detalhes do repositório: %v\n", err)
+	}
+
+	for details := range repoDetailsChan {
+		repoDetailsMap[details.Description] = details // Mapeia URL -> Detalhes
+	}
+
+	for i := range allIssues {
+		if details, ok := repoDetailsMap[allIssues[i].RepositoryURL]; ok {
+			allIssues[i].RepoStars = details.StargazersCount
+			allIssues[i].RepoForks = details.ForksCount
+			allIssues[i].OpenIssuesCount = details.OpenIssuesCount
+		}
+	}
+
+	log.Println("Enriquecimento de dados concluído. Salvando no banco...")
 
 	if len(allIssues) > 0 {
 		copyCount, err := bulkInsertIssues(ctx, pool, allIssues)

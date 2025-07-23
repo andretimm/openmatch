@@ -40,7 +40,9 @@ func bulkInsertIssues(ctx context.Context, pool *pgxpool.Pool, issues []Issue) (
 	copyCount, err := pool.CopyFrom(
 		ctx,
 		pgx.Identifier{"issues"},
-		[]string{"id", "node_id", "url", "repository_url", "title", "user_login", "state", "project_name", "language", "labels", "created_at", "updated_at", "body"},
+		[]string{"id", "node_id", "url", "repository_url", "title", "user_login", "state", "project_name", "language",
+			"labels", "created_at", "updated_at", "body", "stargazers_count", "forks_count", "open_issues_count",
+		},
 		pgx.CopyFromSlice(len(issues), func(i int) ([]interface{}, error) {
 			issue := issues[i]
 			projectName := strings.Join(strings.Split(issue.RepositoryURL, "/")[len(strings.Split(issue.RepositoryURL, "/"))-2:], "/")
@@ -58,12 +60,15 @@ func bulkInsertIssues(ctx context.Context, pool *pgxpool.Pool, issues []Issue) (
 				sanitizeString(issue.Title),
 				issue.User.Login,
 				issue.State,
-				projectName,
+				sanitizeString(projectName),
 				issue.Language,
 				labelsJSON,
 				issue.CreatedAt,
 				issue.UpdatedAt,
 				sanitizeString(issue.Body),
+				issue.RepoStars,
+				issue.RepoForks,
+				issue.OpenIssuesCount,
 			}, nil
 		}),
 	)

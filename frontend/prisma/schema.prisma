@@ -28,10 +28,9 @@ model Issue {
   created_at        DateTime?    @db.Timestamptz(6)
   updated_at        DateTime?    @db.Timestamptz(6)
   body              String?
-  stargazers_count  Int?
-  forks_count       Int?
-  description       String?
-  open_issues_count Int?
+  stargazers_count  Int?         @default(0)
+  forks_count       Int?         @default(0)
+  open_issues_count Int?         @default(0)
   SavedIssue        SavedIssue[]
 
   @@map("issues")
