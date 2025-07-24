@@ -27,9 +27,9 @@ const partners = [
   },
   {
     id: 2,
-    name: "Timm Softwate",
+    name: "Timm Software",
     logo: "/partnership/timm-software-icon.svg",
-    alt: "Logo da Timm Softwate",
+    alt: "Logo da Timm Software",
     url: "https://timm.software/?utm_source=openmatch&utm_medium=referral&utm_campaign=openmatch",
   },
 ];
