@@ -20,9 +20,9 @@ import { useIsMobile } from "@/app/_hooks/use-mobile";
 const partners = [
   {
     id: 1,
-    name: "Cumbuda Dev",
+    name: "Cumbuca Dev",
     logo: "/partnership/cumbuca.svg",
-    alt: "Logo da Cumbuda Dev",
+    alt: "Logo da Cumbuca Dev",
     url: "https://cumbuca.dev/?utm_source=openmatch&utm_medium=referral&utm_campaign=openmatch",
   },
   {
