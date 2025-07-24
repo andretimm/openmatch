@@ -46,7 +46,7 @@ function Repos() {
   const [reloadCount, setReloadCount] = useState(0);
   const [sortField, setSortField] = useState<
     "created_at" | "stargazers_count" | "forks_count"
-  >();
+  >("created_at");
 
   const fetchIdRef = useRef(0);
   const searchParams = useSearchParams();
@@ -71,6 +71,7 @@ function Repos() {
 
     const fetchIssues = async (tags: string[], page: number) => {
       setIsLoading(true);
+      console.log("Fetching issues for tags:", tags, "Page:", page, "Sort:", sortField);
       const newIssues = await getIssuesByLanguage(tags, page, sortField);
       if (!isActive || fetchId !== fetchIdRef.current) return;
       if (newIssues.length === 0) {
@@ -217,7 +218,6 @@ function Repos() {
               value={sortField}
               onValueChange={(value) => {
                 setSortField(value as typeof sortField);
-                setCurrentPage(1);
               }}
             >
               <SelectTrigger className="w-[180px]">

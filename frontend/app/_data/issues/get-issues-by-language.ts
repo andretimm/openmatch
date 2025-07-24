@@ -2,7 +2,6 @@
 
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { Prisma, Issue } from "@prisma/client";
 
 export const getIssuesByLanguage = async (
   languagesToFilter: string[],
@@ -10,59 +9,47 @@ export const getIssuesByLanguage = async (
   orderBy: "created_at" | "stargazers_count" | "forks_count" = "created_at"
 ) => {
   const { userId } = await auth();
+  const pageSize = 50;
+  const offset = (page - 1) * pageSize;
+  const allowedFields = ["created_at", "stargazers_count", "forks_count"];
+  const orderField = allowedFields.includes(orderBy) ? orderBy : "created_at";
+
+  const languageFilter =
+    languagesToFilter.length > 0 ? { language: { in: languagesToFilter } } : {};
+
+  let notSavedFilter = {};
+  if (userId) {
+    notSavedFilter = {
+      NOT: {
+        saved_issue: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+    };
+  }
+
   console.log("getIssuesByLanguage", {
     languagesToFilter,
     page,
     orderBy,
     userId,
   });
-  //  const orderByClause = Prisma.sql`i.${orderBy} DESC`;
 
-  const pageSize = 50;
-  const offset = (page - 1) * pageSize;
-  const languageCondition =
-    languagesToFilter.length > 0
-      ? Prisma.sql`i.language IN (${Prisma.join(languagesToFilter)})`
-      : Prisma.sql`TRUE`;
-
-  const notSavedCondition = userId
-    ? Prisma.sql`
-        AND NOT EXISTS (
-          SELECT 1 FROM "saved_issue" si
-          WHERE si."issueId" = i.id AND si."userId" = ${userId}
-        )
-      `
-    : Prisma.empty;
   try {
-    const issues = await db.$queryRaw<Issue[]>(Prisma.sql`
-      SELECT
-        i.id,
-        i.node_id,
-        i.url,
-        i.repository_url,
-        i.title,
-        i.user_login,
-        i.state,
-        i.project_name,
-        i.language,
-        i.labels,
-        i.created_at,
-        i.updated_at,
-        i.body,
-        i.stargazers_count,
-        i.forks_count,
-        i.open_issues_count
-      FROM
-        issues AS i
-      WHERE
-        ${languageCondition}
-        AND i.state = 'open'
-        ${notSavedCondition}
-      ORDER BY
-       ${Prisma.raw(`i.${orderBy} DESC `)}
-      LIMIT ${pageSize}
-      OFFSET ${offset};
-    `);
+    const issues = await db.issue.findMany({
+      where: {
+        state: "open",
+        ...languageFilter,
+        ...notSavedFilter,
+      },
+      orderBy: {
+        [orderField]: "desc",
+      },
+      skip: offset,
+      take: pageSize,
+    });
 
     return issues;
   } catch (error) {
