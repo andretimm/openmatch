@@ -6,9 +6,17 @@ import { Prisma, Issue } from "@prisma/client";
 
 export const getIssuesByLanguage = async (
   languagesToFilter: string[],
-  page: number = 1
+  page: number = 1,
+  orderBy: "created_at" | "stargazers_count" | "forks_count" = "created_at"
 ) => {
   const { userId } = await auth();
+  console.log("getIssuesByLanguage", {
+    languagesToFilter,
+    page,
+    orderBy,
+    userId,
+  });
+  //  const orderByClause = Prisma.sql`i.${orderBy} DESC`;
 
   const pageSize = 50;
   const offset = (page - 1) * pageSize;
@@ -25,7 +33,6 @@ export const getIssuesByLanguage = async (
         )
       `
     : Prisma.empty;
-
   try {
     const issues = await db.$queryRaw<Issue[]>(Prisma.sql`
       SELECT
@@ -52,7 +59,7 @@ export const getIssuesByLanguage = async (
         AND i.state = 'open'
         ${notSavedCondition}
       ORDER BY
-         i.created_at DESC
+       ${Prisma.raw(`i.${orderBy} DESC `)}
       LIMIT ${pageSize}
       OFFSET ${offset};
     `);

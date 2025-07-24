@@ -3,6 +3,13 @@
 import { saveIssue } from "@/app/_actions/issues/save-issue";
 import ClerkAuthArea from "@/app/_components/login-area";
 import { Button } from "@/app/_components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/_components/ui/select";
 import { Skeleton } from "@/app/_components/ui/skeleton";
 import { Language, languages } from "@/app/_constants/languages";
 import { getIssuesByLanguage } from "@/app/_data/issues/get-issues-by-language";
@@ -37,6 +44,10 @@ function Repos() {
   );
   const [countSavedIssues, setCountSavedIssues] = useState<number>(0);
   const [reloadCount, setReloadCount] = useState(0);
+  const [sortField, setSortField] = useState<
+    "created_at" | "stargazers_count" | "forks_count"
+  >();
+
   const fetchIdRef = useRef(0);
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
@@ -60,7 +71,7 @@ function Repos() {
 
     const fetchIssues = async (tags: string[], page: number) => {
       setIsLoading(true);
-      const newIssues = await getIssuesByLanguage(tags, page);
+      const newIssues = await getIssuesByLanguage(tags, page, sortField);
       if (!isActive || fetchId !== fetchIdRef.current) return;
       if (newIssues.length === 0) {
         setHasMore(false);
@@ -81,7 +92,7 @@ function Repos() {
     return () => {
       isActive = false;
     };
-  }, [tagsInArray.join(","), currentPage, reloadCount]);
+  }, [tagsInArray.join(","), currentPage, reloadCount, sortField]);
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -201,6 +212,24 @@ function Repos() {
 
       <div className="px-6 py-8">
         <div className="max-w-6xl mx-auto">
+          <div className="flex items-center lg:justify-center mb-6  ">
+            <Select
+              value={sortField}
+              onValueChange={(value) => {
+                setSortField(value as typeof sortField);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Ordenar" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="created_at">Data de abertura</SelectItem>
+                <SelectItem value="stargazers_count">Estrelas</SelectItem>
+                <SelectItem value="forks_count">Forks</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 flex flex-col justify-center">
               {isLoading ? (

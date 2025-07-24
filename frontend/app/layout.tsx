@@ -5,6 +5,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Toaster } from "@/app/_components/ui/sonner";
 import "@/app/globals.css";
+import { ThemeProvider } from "@/app/_components/theme-providers";
 
 const siteUrl = "https://www.openmatch.io";
 
@@ -88,17 +89,24 @@ export default function RootLayout({
       }}
       localization={ptBR}
     >
-      <html lang="pt-BR">
+      <html lang="pt-BR" suppressHydrationWarning>
         <head>
           <meta name="apple-mobile-web-app-title" content="Open Match" />
         </head>
         <body>
-          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
-            <div className="absolute top-1/4 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
-            {children}
-          </div>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
+              <div className="absolute top-1/4 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+              <div className="absolute bottom-1/4 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+              {children}
+            </div>
+          </ThemeProvider>
           <Toaster />
         </body>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
