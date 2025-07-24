@@ -41,7 +41,10 @@ export const getIssuesByLanguage = async (
         i.labels,
         i.created_at,
         i.updated_at,
-        i.body
+        i.body,
+        i.stargazers_count,
+        i.forks_count,
+        i.open_issues_count
       FROM
         issues AS i
       WHERE
