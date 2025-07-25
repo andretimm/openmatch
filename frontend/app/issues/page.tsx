@@ -53,6 +53,7 @@ function Repos() {
   const isMobile = useIsMobile();
 
   const tagsInArray = searchParams.getAll("tag");
+  const forceReloadRef = useRef(false);
 
   const handleReload = () => {
     if (reloadDisabled) return;
@@ -71,13 +72,27 @@ function Repos() {
 
     const fetchIssues = async (tags: string[], page: number) => {
       setIsLoading(true);
-      console.log("Fetching issues for tags:", tags, "Page:", page, "Sort:", sortField);
+      console.log(
+        "Fetching issues for tags:",
+        tags,
+        "Page:",
+        page,
+        "Sort:",
+        sortField
+      );
       const newIssues = await getIssuesByLanguage(tags, page, sortField);
+      console.log("Fetched issues:", newIssues.length);
       if (!isActive || fetchId !== fetchIdRef.current) return;
       if (newIssues.length === 0) {
-        setHasMore(false);
+        //setHasMore(false);
       } else {
-        setIssuesList((prev) => [...prev, ...newIssues]);
+        //setHasMore(true);
+        if (forceReloadRef.current) {
+          forceReloadRef.current = false;
+          setIssuesList(newIssues);
+        } else {
+          setIssuesList((prev) => [...prev, ...newIssues]);
+        }
       }
       setIsLoading(false);
     };
@@ -87,7 +102,10 @@ function Repos() {
         .map((tag) => languages.find((lang) => lang.key === tag))
         .filter(Boolean) as Language[]
     );
-
+    if (forceReloadRef.current) {
+      setCurrentPage(1);
+      setCurrentIndex(0);
+    }
     fetchIssues(tagsInArray, currentPage);
 
     return () => {
@@ -217,6 +235,7 @@ function Repos() {
             <Select
               value={sortField}
               onValueChange={(value) => {
+                forceReloadRef.current = true;
                 setSortField(value as typeof sortField);
               }}
             >
