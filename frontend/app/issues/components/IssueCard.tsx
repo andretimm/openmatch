@@ -1,11 +1,17 @@
 import { Badge } from "@/app/_components/ui/badge";
 import { Card, CardHeader } from "@/app/_components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/app/_components/ui/tooltip";
 import { languages } from "@/app/_constants/languages";
 import { Issue } from "@prisma/client";
 import { motion, useAnimation } from "framer-motion";
 import { Clock, ExternalLink, GitBranch, User } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { FaStar, FaCodeBranch, FaExclamationCircle } from "react-icons/fa";
 interface IssueCardProps {
   issue: Issue;
   onSave: () => void;
@@ -216,6 +222,27 @@ const IssueCard = ({
               <GitBranch className="h-4 w-4" />
               <span>{issue.project_name}</span>
             </div>
+            <Tooltip>
+              <TooltipTrigger className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
+                  <FaStar className="h-4 w-4 text-gray-400 " />
+                  <span>{issue.stargazers_count ?? 0}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <FaCodeBranch className="h-4 w-4 text-gray-400 " />
+                  <span>{issue.forks_count ?? 0}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <FaExclamationCircle className="h-4 w-4 text-gray-400 " />
+                  <span>{issue.open_issues_count ?? 0}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{`Última atualização: ${new Date(
+                  issue.updated_at ?? Date.now()
+                ).toLocaleString("pt-BR")}`}</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </CardHeader>
 

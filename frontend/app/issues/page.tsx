@@ -3,6 +3,13 @@
 import { saveIssue } from "@/app/_actions/issues/save-issue";
 import ClerkAuthArea from "@/app/_components/login-area";
 import { Button } from "@/app/_components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/_components/ui/select";
 import { Skeleton } from "@/app/_components/ui/skeleton";
 import { Language, languages } from "@/app/_constants/languages";
 import { getIssuesByLanguage } from "@/app/_data/issues/get-issues-by-language";
@@ -37,11 +44,16 @@ function Repos() {
   );
   const [countSavedIssues, setCountSavedIssues] = useState<number>(0);
   const [reloadCount, setReloadCount] = useState(0);
+  const [sortField, setSortField] = useState<
+    "created_at" | "stargazers_count" | "forks_count"
+  >("created_at");
+
   const fetchIdRef = useRef(0);
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
 
   const tagsInArray = searchParams.getAll("tag");
+  const forceReloadRef = useRef(false);
 
   const handleReload = () => {
     if (reloadDisabled) return;
@@ -60,12 +72,27 @@ function Repos() {
 
     const fetchIssues = async (tags: string[], page: number) => {
       setIsLoading(true);
-      const newIssues = await getIssuesByLanguage(tags, page);
+      console.log(
+        "Fetching issues for tags:",
+        tags,
+        "Page:",
+        page,
+        "Sort:",
+        sortField
+      );
+      const newIssues = await getIssuesByLanguage(tags, page, sortField);
+      console.log("Fetched issues:", newIssues.length);
       if (!isActive || fetchId !== fetchIdRef.current) return;
       if (newIssues.length === 0) {
-        setHasMore(false);
+        //setHasMore(false);
       } else {
-        setIssuesList((prev) => [...prev, ...newIssues]);
+        //setHasMore(true);
+        if (forceReloadRef.current) {
+          forceReloadRef.current = false;
+          setIssuesList(newIssues);
+        } else {
+          setIssuesList((prev) => [...prev, ...newIssues]);
+        }
       }
       setIsLoading(false);
     };
@@ -75,13 +102,16 @@ function Repos() {
         .map((tag) => languages.find((lang) => lang.key === tag))
         .filter(Boolean) as Language[]
     );
-
+    if (forceReloadRef.current) {
+      setCurrentPage(1);
+      setCurrentIndex(0);
+    }
     fetchIssues(tagsInArray, currentPage);
 
     return () => {
       isActive = false;
     };
-  }, [tagsInArray.join(","), currentPage, reloadCount]);
+  }, [tagsInArray.join(","), currentPage, reloadCount, sortField]);
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -201,6 +231,24 @@ function Repos() {
 
       <div className="px-6 py-8">
         <div className="max-w-6xl mx-auto">
+          <div className="flex items-center lg:justify-center mb-6  ">
+            <Select
+              value={sortField}
+              onValueChange={(value) => {
+                forceReloadRef.current = true;
+                setSortField(value as typeof sortField);
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Ordenar" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="created_at">Data de abertura</SelectItem>
+                <SelectItem value="stargazers_count">Estrelas</SelectItem>
+                <SelectItem value="forks_count">Forks</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 flex flex-col justify-center">
               {isLoading ? (

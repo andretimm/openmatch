@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+
 	"os"
 	"time"
 
@@ -20,6 +21,7 @@ func main() {
 	if os.Getenv("GITHUB_TOKEN") != "" {
 		githubToken = os.Getenv("GITHUB_TOKEN")
 	}
+
 	pool, err := initDB(connString)
 	if err != nil {
 		log.Fatalf("Não foi possível conectar ao PostgreSQL: %v\n", err)

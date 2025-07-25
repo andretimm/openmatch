@@ -15,20 +15,23 @@ model CrawlerState {
 }
 
 model Issue {
-  id             BigInt       @id
-  node_id        String       @unique
-  url            String?
-  repository_url String?
-  title          String?
-  user_login     String?
-  state          String?
-  project_name   String?
-  language       String?
-  labels         Json?
-  created_at     DateTime?    @db.Timestamptz(6)
-  updated_at     DateTime?    @db.Timestamptz(6)
-  body           String?
-  SavedIssue     SavedIssue[]
+  id                BigInt       @id
+  node_id           String       @unique
+  url               String?
+  repository_url    String?
+  title             String?
+  user_login        String?
+  state             String?
+  project_name      String?
+  language          String?
+  labels            Json?
+  created_at        DateTime?    @db.Timestamptz(6)
+  updated_at        DateTime?    @db.Timestamptz(6)
+  body              String?
+  stargazers_count  Int?         @default(0)
+  forks_count       Int?         @default(0)
+  open_issues_count Int?         @default(0)
+  SavedIssue        SavedIssue[]
 
   @@map("issues")
 }

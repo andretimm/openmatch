@@ -46,14 +46,14 @@ func bulkUpdateDatabase(ctx context.Context, pool *pgxpool.Pool, updates []Updat
 		return 0, nil
 	}
 
-	const colsPerUpdate = 6
+	const colsPerUpdate = 9
 	var valueStrings []string
 	var flatValues []interface{}
 
 	paramIndex := 1
 	for _, update := range updates {
-		placeholders := fmt.Sprintf("($%d, $%d, $%d, $%d, $%d, $%d)",
-			paramIndex, paramIndex+1, paramIndex+2, paramIndex+3, paramIndex+4, paramIndex+5)
+		placeholders := fmt.Sprintf("($%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d)",
+			paramIndex, paramIndex+1, paramIndex+2, paramIndex+3, paramIndex+4, paramIndex+5, paramIndex+6, paramIndex+7, paramIndex+8)
 		valueStrings = append(valueStrings, placeholders)
 		paramIndex += colsPerUpdate
 
@@ -64,8 +64,14 @@ func bulkUpdateDatabase(ctx context.Context, pool *pgxpool.Pool, updates []Updat
 
 		updatedAtString := update.UpdatedAt.UTC().Format(time.RFC3339)
 		assigneeCountString := strconv.Itoa(update.AssigneeCount)
+		repoStarsString := strconv.Itoa(update.RepoStars)
+		repoForksString := strconv.Itoa(update.RepoForks)
+		repoOpenIssuesCountString := strconv.Itoa(update.RepoOpenIssuesCount) // Convertemos o novo campo
 
-		flatValues = append(flatValues, update.ID, update.Title, update.State, labelsJSON, updatedAtString, assigneeCountString)
+		flatValues = append(flatValues,
+			update.ID, update.Title, update.State, labelsJSON, updatedAtString, assigneeCountString,
+			repoStarsString, repoForksString, repoOpenIssuesCountString,
+		)
 	}
 
 	var sqlBuilder strings.Builder
@@ -79,12 +85,15 @@ func bulkUpdateDatabase(ctx context.Context, pool *pgxpool.Pool, updates []Updat
 				ELSE 'open'
 			END,
 			labels = data.labels::jsonb,
-			updated_at = data.updated_at::timestamptz
+			updated_at = data.updated_at::timestamptz,
+			stargazers_count = data.stargazers_count::integer,
+			forks_count = data.forks_count::integer,
+			open_issues_count = data.open_issues_count::integer
 		FROM (VALUES 
 	`)
 	sqlBuilder.WriteString(strings.Join(valueStrings, ", "))
 	sqlBuilder.WriteString(`
-		) AS data(node_id, title, state_from_api, labels, updated_at, assignee_count)
+		) AS data(node_id, title, state_from_api, labels, updated_at, assignee_count, stargazers_count, forks_count, open_issues_count)
 		WHERE issues.node_id = data.node_id
 	`)
 

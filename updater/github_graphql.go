@@ -28,6 +28,13 @@ type FragmentIssue struct {
 	Assignees struct {
 		TotalCount graphql.Int
 	} `graphql:"assignees(first:1)"`
+	Repository struct {
+		StargazerCount graphql.Int
+		ForkCount      graphql.Int
+		OpenIssues     struct {
+			TotalCount graphql.Int
+		} `graphql:"issues(states: [OPEN])"`
+	} `graphql:"repository"`
 }
 
 type NodesQuery struct {
@@ -67,12 +74,15 @@ func fetchUpdatesFromGitHubGraphQL(ctx context.Context, nodeIDs []graphql.ID) ([
 		}
 
 		updatedInfos = append(updatedInfos, UpdatedInfo{
-			ID:            fmt.Sprintf("%v", node.Issue.ID),
-			Title:         string(node.Issue.Title),
-			State:         strings.ToLower(string(node.Issue.State)),
-			Labels:        labelsToSave,
-			UpdatedAt:     node.Issue.UpdatedAt,
-			AssigneeCount: int(node.Issue.Assignees.TotalCount),
+			ID:                  fmt.Sprintf("%v", node.Issue.ID),
+			Title:               string(node.Issue.Title),
+			State:               strings.ToLower(string(node.Issue.State)),
+			Labels:              labelsToSave,
+			UpdatedAt:           node.Issue.UpdatedAt,
+			AssigneeCount:       int(node.Issue.Assignees.TotalCount),
+			RepoStars:           int(node.Issue.Repository.StargazerCount),
+			RepoForks:           int(node.Issue.Repository.ForkCount),
+			RepoOpenIssuesCount: int(node.Issue.Repository.OpenIssues.TotalCount),
 		})
 	}
 
