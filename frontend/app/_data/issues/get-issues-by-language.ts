@@ -21,7 +21,7 @@ export const getIssuesByLanguage = async (
   if (userId) {
     notSavedFilter = {
       NOT: {
-        saved_issue: {
+        SavedIssue: {
           some: {
             userId: userId,
           },
